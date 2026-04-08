@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberShield FAQ Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell" aria-label="CyberShield FAQ chatbot">
+    <div class="app-skeleton" id="appSkeleton" aria-hidden="true">
+      <div class="skeleton-sidebar">
+        <div class="skeleton-brand">
+          <span class="skeleton-dot"></span>
+          <div class="skeleton-brand-copy">
+            <span class="skeleton-line skeleton-line-title"></span>
+            <span class="skeleton-line skeleton-line-subtitle"></span>
+          </div>
+        </div>
+        <div class="skeleton-nav">
+          <span class="skeleton-pill"></span>
+          <span class="skeleton-pill"></span>
+          <span class="skeleton-pill"></span>
+        </div>
+        <div class="skeleton-history">
+          <span class="skeleton-line skeleton-line-title"></span>
+          <span class="skeleton-card"></span>
+          <span class="skeleton-card"></span>
+        </div>
+      </div>
+      <div class="skeleton-main">
+        <div class="skeleton-topbar">
+          <span class="skeleton-line skeleton-topbar-line"></span>
+        </div>
+        <div class="skeleton-hero">
+          <span class="skeleton-line skeleton-hero-kicker"></span>
+          <span class="skeleton-line skeleton-hero-title"></span>
+          <span class="skeleton-line skeleton-hero-subtitle"></span>
+          <span class="skeleton-composer"></span>
+          <div class="skeleton-chip-row">
+            <span class="skeleton-chip"></span>
+            <span class="skeleton-chip"></span>
+            <span class="skeleton-chip"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Navigation">
+      <div class="sidebar-top">
+        <div class="sidebar-brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="bot-icon" focusable="false">
+              <path d="M12 4v2"></path>
+              <path d="M8.2 8.2h7.6c1.99 0 3.6 1.61 3.6 3.6v3.2c0 1.99-1.61 3.6-3.6 3.6H11l-3.8 2.4v-2.4H8.2c-1.99 0-3.6-1.61-3.6-3.6v-3.2c0-1.99 1.61-3.6 3.6-3.6Z"></path>
+              <circle cx="9.6" cy="13.2" r="1"></circle>
+              <circle cx="14.4" cy="13.2" r="1"></circle>
+              <path d="M9.4 16h5.2"></path>
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <h1>CyberShield</h1>
+            <p>FAQ Assistant</p>
+          </div>
+        </div>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Retract menu">
+          <i data-feather="chevrons-left"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="sidebar-link" id="newChatButton">
+          <i data-feather="edit-3"></i>
+          <span>New FAQ Chat</span>
+        </button>
+        <button type="button" class="sidebar-link" data-prompt="How do I spot phishing emails?">
+          <i data-feather="mail"></i>
+          <span>Phishing FAQ</span>
+        </button>
+        <button type="button" class="sidebar-link" data-prompt="Start the security quiz">
+          <i data-feather="clipboard"></i>
+          <span>Security Checkup</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-head">
+          <div class="sidebar-heading">Chats</div>
+          <button type="button" class="sidebar-clear" id="clearHistoryButton" aria-label="Clear chat history">
+            <i data-feather="trash-2"></i>
+          </button>
+        </div>
+        <div class="chat-history" id="chatHistory">
+          <p class="chat-history-empty">No conversations yet. Start with a quick question.</p>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-meta">
+          <span>Rule-based demo</span>
+          <span>CyberShield</span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+
+    <section class="workspace">
+      <header class="topbar">
+        <button type="button" class="icon-button topbar-menu" id="mobileMenuButton" aria-label="Open menu">
+          <i data-feather="menu"></i>
+        </button>
+        <div class="topbar-status">
+          <span>School Project</span>
+          <span class="status-divider">·</span>
+          <span class="topbar-link">CyberShield Demo</span>
+        </div>
+      </header>
+
+      <div class="privacy-banner" id="privacyBanner">
+        <svg viewBox="0 0 24 24" class="bot-icon" focusable="false" aria-hidden="true">
+          <path d="M12 4v2"></path>
+          <path d="M8.2 8.2h7.6c1.99 0 3.6 1.61 3.6 3.6v3.2c0 1.99-1.61 3.6-3.6 3.6H11l-3.8 2.4v-2.4H8.2c-1.99 0-3.6-1.61-3.6-3.6v-3.2c0-1.99 1.61-3.6 3.6-3.6Z"></path>
+          <circle cx="9.6" cy="13.2" r="1"></circle>
+          <circle cx="14.4" cy="13.2" r="1"></circle>
+          <path d="M9.4 16h5.2"></path>
+        </svg>
+        <p>CyberShield answers common cybersecurity FAQs in this browser session without storing them remotely.</p>
+      </div>
+
+      <section id="chatMessages" class="chat-messages" aria-live="polite"></section>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="hero-kicker">
+            <svg viewBox="0 0 24 24" class="bot-icon hero-kicker-icon" focusable="false" aria-hidden="true">
+              <path d="M12 4v2"></path>
+              <path d="M8.2 8.2h7.6c1.99 0 3.6 1.61 3.6 3.6v3.2c0 1.99-1.61 3.6-3.6 3.6H11l-3.8 2.4v-2.4H8.2c-1.99 0-3.6-1.61-3.6-3.6v-3.2c0-1.99 1.61-3.6 3.6-3.6Z"></path>
+              <circle cx="9.6" cy="13.2" r="1"></circle>
+              <circle cx="14.4" cy="13.2" r="1"></circle>
+              <path d="M9.4 16h5.2"></path>
+            </svg>
+            <span>CyberShield</span>
+          </p>
+          <h2>
+            <span class="hero-line">answers</span>
+            <span class="hero-line hero-emphasis">
+              <span>common security FAQs</span>
+            </span>
+          </h2>
+          <p class="hero-description">Ask about phishing, passwords, safe browsing, mobile security, incidents, and practical everyday protection.</p>
+        </div>
+        <form id="chatForm" class="hero-composer">
+          <label class="sr-only" for="userInput">Ask a cybersecurity question</label>
+          <input
+            id="userInput"
+            name="message"
+            type="text"
+            maxlength="500"
+            placeholder="Ask a cybersecurity FAQ..."
+            autocomplete="off"
+          >
+
+          <div class="composer-row">
+            <div class="composer-actions-right">
+              <button type="button" class="composer-chip" data-prompt="Start the security quiz">
+                <span>FAQ Quiz</span>
+                <i data-feather="chevron-down"></i>
+              </button>
+              <button id="sendButton" type="submit" class="composer-submit" aria-label="Send message">
+                <i data-feather="arrow-up"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="hero-suggestions" aria-label="Suggested topics">
+          <button type="button" class="suggestion-pill" data-prompt="How do I spot phishing emails?">Phishing FAQ</button>
+          <button type="button" class="suggestion-pill" data-prompt="Tell me about password security">Password FAQ</button>
+          <button type="button" class="suggestion-pill" data-prompt="How do I protect my phone?">Mobile FAQ</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <template id="messageTemplate">
+    <article class="message">
+      <div class="message-bubble"></div>
+    </article>
+  </template>
+
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="script.js"></script>
+</body>
+</html>
