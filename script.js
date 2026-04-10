@@ -1147,6 +1147,19 @@ function handleUserMessage(rawInput) {
   userInput.value = "";
 
   if (quizState.active && quizRestartTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    // Remove all messages after the user's restart message
+    const userMessage = chatMessages.lastElementChild;
+    if (userMessage) {
+      let nextSibling = userMessage.nextElementSibling;
+      while (nextSibling) {
+        const toRemove = nextSibling;
+        nextSibling = nextSibling.nextElementSibling;
+        toRemove.remove();
+      }
+    }
+    quizState.active = false;
+    quizState.currentIndex = 0;
+    quizState.answers = [];
     startQuizFlow();
     return;
   }
