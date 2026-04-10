@@ -1055,10 +1055,19 @@ function buildQuizResultsCard() {
 
 function startQuizFlow() {
   resetQuizState();
+  
+  // Clear any existing quiz/score cards before starting fresh
+  chatMessages.querySelectorAll(".message").forEach((msg) => {
+    const bubble = msg.querySelector(".message-bubble");
+    if (bubble && (bubble.querySelector(".quiz-card") || bubble.querySelector(".score-card"))) {
+      msg.remove();
+    }
+  });
+  
   addBotMessageWithDelay(() => {
     addMessage("bot", [
-      "Let’s run a quick security checkup. Pick the answer that sounds most like your current habits.",
-      "I’ll score the results and give you a few practical recommendations at the end."
+      "Let's run a quick security checkup. Pick the answer that sounds most like your current habits.",
+      "I'll score the results and give you a few practical recommendations at the end."
     ]);
     addMessage("bot", buildQuizQuestionCard());
   });
@@ -1147,19 +1156,6 @@ function handleUserMessage(rawInput) {
   userInput.value = "";
 
   if (quizState.active && quizRestartTriggers.some((trigger) => normalizedInput.includes(trigger))) {
-    // Remove all messages after the user's restart message
-    const userMessage = chatMessages.lastElementChild;
-    if (userMessage) {
-      let nextSibling = userMessage.nextElementSibling;
-      while (nextSibling) {
-        const toRemove = nextSibling;
-        nextSibling = nextSibling.nextElementSibling;
-        toRemove.remove();
-      }
-    }
-    quizState.active = false;
-    quizState.currentIndex = 0;
-    quizState.answers = [];
     startQuizFlow();
     return;
   }
