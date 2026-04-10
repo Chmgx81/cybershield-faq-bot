@@ -12,6 +12,9 @@ const sidebarOverlay = document.querySelector("#sidebarOverlay");
 const appSkeleton = document.querySelector("#appSkeleton");
 const chatHistory = document.querySelector("#chatHistory");
 const clearHistoryButton = document.querySelector("#clearHistoryButton");
+const scrollDownButton = document.querySelector("#scrollDownButton");
+
+let isAtBottom = true;
 
 let hasStartedConversation = false;
 let currentChatTitle = "";
@@ -340,10 +343,16 @@ function truncateInput(text) {
   return text.slice(0, 500);
 }
 
-function scrollChatToBottom() {
-  requestAnimationFrame(() => {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  });
+function scrollChatToBottom(force = false) {
+  if (force || isAtBottom) {
+    isAtBottom = true;
+    if (scrollDownButton) {
+      scrollDownButton.classList.remove("is-visible");
+    }
+    window.requestAnimationFrame(() => {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  }
 }
 
 function refreshIcons() {
@@ -629,9 +638,23 @@ function addUtilityActions(container, role, contentText) {
         return;
       }
 
+      // Remove all messages after the one being retried
       const existingMessage = container.closest(".message");
       if (existingMessage) {
+        let nextSibling = existingMessage.nextElementSibling;
+        while (nextSibling) {
+          const toRemove = nextSibling;
+          nextSibling = nextSibling.nextElementSibling;
+          toRemove.remove();
+        }
         existingMessage.remove();
+      }
+
+      // Reset quiz state if active
+      if (quizState.active) {
+        quizState.active = false;
+        quizState.currentIndex = 0;
+        quizState.answers = [];
       }
 
       addBotMessageWithDelay(() => {
@@ -642,7 +665,8 @@ function addUtilityActions(container, role, contentText) {
         }
 
         addMessage("bot", reply.response, {
-          suggestions: reply.suggestions
+          suggestions: reply.suggestions,
+          confidence: reply.confidence
         });
       });
     });
@@ -708,6 +732,13 @@ function addMessage(role, content, options = {}) {
     addQuickReplies(bubble, options.suggestions);
   }
 
+  if (options.confidence && role === "bot") {
+    const confidenceBadge = document.createElement("div");
+    confidenceBadge.className = "confidence-badge";
+    confidenceBadge.textContent = `Match: ${options.confidence}`;
+    bubble.appendChild(confidenceBadge);
+  }
+
   if ((contentText && !options.hideUtilities) || (role === "bot" && !options.hideFeedback)) {
     const footer = document.createElement("div");
     footer.className = "message-footer";
@@ -726,7 +757,7 @@ function addMessage(role, content, options = {}) {
   chatMessages.appendChild(messageElement);
   syncActiveSessionState();
   refreshIcons();
-  scrollChatToBottom();
+  scrollChatToBottom(role === "user");
   return messageElement;
 }
 
@@ -770,54 +801,59 @@ function findBestTopic(normalizedInput) {
 function buildGreetingResponse() {
   return {
     response: [
-      "Hi, I’m CyberShield, your cybersecurity FAQ assistant.",
+      "Hi, I'm CyberShield, your cybersecurity FAQ assistant.",
       "I can give quick, practical answers on phishing, passwords, safe browsing, mobile security, incident response, and a short security checkup.",
-      "Ask me something specific like “How do I spot phishing emails?” or use one of the suggested prompts below."
+      "Ask me something specific like \"How do I spot phishing emails?\" or use one of the suggested prompts below."
     ],
-    suggestions: ["How do I spot phishing emails?", "Strong password tips", "Start the security quiz"]
+    suggestions: ["How do I spot phishing emails?", "Strong password tips", "Start the security quiz"],
+    confidence: "greeting pattern match"
   };
 }
 
 function buildHelpResponse() {
   return {
     response: [
-      "I’m built to answer common cybersecurity FAQs with short, practical guidance.",
+      "I'm built to answer common cybersecurity FAQs with short, practical guidance.",
       "You can ask about password safety, phishing, suspicious links, phone security, data protection, or what to do after a possible breach.",
       "If you want a broader check, I can also run a quick security quiz and give recommendations."
     ],
-    suggestions: ["Password security tips", "How do I report phishing?", "Start the security quiz"]
+    suggestions: ["Password security tips", "How do I report phishing?", "Start the security quiz"],
+    confidence: "help keyword match"
   };
 }
 
 function buildThanksResponse() {
   return {
     response: [
-      "You’re welcome.",
-      "If you want, keep going with another cybersecurity question and I’ll stay focused on practical next steps."
+      "You're welcome.",
+      "If you want, keep going with another cybersecurity question and I'll stay focused on practical next steps."
     ],
-    suggestions: ["How can I browse safely?", "What should I do after a breach?", "Check my security habits"]
+    suggestions: ["How can I browse safely?", "What should I do after a breach?", "Check my security habits"],
+    confidence: "thanks keyword match"
   };
 }
 
 function buildIdentityResponse() {
   return {
     response: [
-      "I’m CyberShield, a rule-based cybersecurity FAQ chatbot for this project.",
+      "I'm CyberShield, a rule-based cybersecurity FAQ chatbot for this project.",
       "I answer common questions about phishing, passwords, mobile safety, safe browsing, incident response, and basic security habits.",
-      "I’m not a live human analyst, but I can give quick, practical guidance and run the built-in security checkup."
+      "I'm not a live human analyst, but I can give quick, practical guidance and run the built-in security checkup."
     ],
-    suggestions: ["How do I spot phishing emails?", "What can you help me with?", "Start the security quiz"]
+    suggestions: ["How do I spot phishing emails?", "What can you help me with?", "Start the security quiz"],
+    confidence: "identity keyword match"
   };
 }
 
 function buildFallbackResponse() {
   return {
     response: [
-      "I’m not fully sure what you need from that message yet, but I can help with common cybersecurity FAQs.",
-      "Try a direct question like “How do I recognize phishing?”, “How do I protect my phone?”, or “What should I do after a breach?”",
+      "I'm not fully sure what you need from that message yet, but I can help with common cybersecurity FAQs.",
+      "Try a direct question like \"How do I recognize phishing?\", \"How do I protect my phone?\", or \"What should I do after a breach?\"",
       "You can also start the security quiz if you want a broader checkup."
     ],
-    suggestions: fallbackSuggestions
+    suggestions: fallbackSuggestions,
+    confidence: "no keyword match (fallback)"
   };
 }
 
@@ -856,12 +892,12 @@ function getBotReply(userText) {
 
   if (asksHow && tokens.has("password")) {
     const topic = getTopicById("password");
-    return { type: "faq", response: topic.response, suggestions: topic.suggestions };
+    return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: password" };
   }
 
   if ((tokens.has("phishing") || tokens.has("scam")) && (tokens.has("email") || tokens.has("emails") || tokens.has("message") || tokens.has("messages") || tokens.has("sms"))) {
     const topic = getTopicById("phishing");
-    return { type: "faq", response: topic.response, suggestions: topic.suggestions };
+    return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: phishing + email" };
   }
 
   const matchedTopic = findBestTopic(normalizedInput);
@@ -872,7 +908,8 @@ function getBotReply(userText) {
   return {
     type: "faq",
     response: matchedTopic.response,
-    suggestions: matchedTopic.suggestions
+    suggestions: matchedTopic.suggestions,
+    confidence: `matched keywords: ${Object.keys(matchedTopic.keywords).slice(0, 3).join(", ")}`
   };
 }
 
@@ -915,6 +952,13 @@ function buildQuizQuestionCard() {
     button.textContent = option.label;
     button.addEventListener("click", () => {
       quizState.answers.push(option.score);
+      
+      // Find and remove the current quiz card message
+      const currentQuizMessage = wrapper.closest(".message");
+      if (currentQuizMessage) {
+        currentQuizMessage.remove();
+      }
+      
       quizState.currentIndex += 1;
       if (quizState.currentIndex < quizQuestions.length) {
         addBotMessageWithDelay(() => {
@@ -928,6 +972,7 @@ function buildQuizQuestionCard() {
           });
         });
       }
+      scrollChatToBottom(true);
     });
     options.appendChild(button);
   });
@@ -1025,6 +1070,7 @@ function addBotMessageWithDelay(callback) {
     pendingBotTimeouts = pendingBotTimeouts.filter((id) => id !== timeoutId);
     typingMessage.remove();
     callback();
+    setTimeout(() => scrollChatToBottom(true), 10);
   }, 500);
   pendingBotTimeouts.push(timeoutId);
 }
@@ -1125,7 +1171,8 @@ function handleUserMessage(rawInput) {
 
   addBotMessageWithDelay(() => {
     addMessage("bot", reply.response, {
-      suggestions: reply.suggestions
+      suggestions: reply.suggestions,
+      confidence: reply.confidence
     });
   });
 }
@@ -1193,6 +1240,24 @@ document.addEventListener("keydown", (event) => {
     syncNavigationState();
   }
 });
+
+if (chatMessages && scrollDownButton) {
+  chatMessages.addEventListener("scroll", () => {
+    const scrollBottom = chatMessages.scrollTop + chatMessages.clientHeight;
+    const atBottom = scrollBottom >= chatMessages.scrollHeight - 30;
+    if (atBottom) {
+      isAtBottom = true;
+      scrollDownButton.classList.remove("is-visible");
+    } else {
+      isAtBottom = false;
+      scrollDownButton.classList.add("is-visible");
+    }
+  });
+  
+  scrollDownButton.addEventListener("click", () => {
+    scrollChatToBottom(true);
+  });
+}
 
 syncNavigationState();
 renderHistory();
