@@ -585,7 +585,7 @@ const quizState = {
   answers: []
 };
 
-const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security", "security quiz", "take a quiz", "start quiz", "security checkup", "checkup"];
+const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security", "security quiz", "take a quiz", "start quiz", "security checkup", "checkup", "take the quiz", "do a quiz"];
 const fallbackSuggestions = ["Strong password tips", "How to report phishing", "Start the security quiz"];
 const quizRestartTriggers = ["restart quiz", "retake quiz", "start quiz again", "start again"];
 const greetingTriggers = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "greetings", "good day"];
@@ -1254,6 +1254,14 @@ function getBotReply(userText) {
   const asksHow = tokens.has("how") || tokens.has("what") || tokens.has("why");
   const hasGreeting = greetingTriggers.some((trigger) => normalizedInput === trigger || normalizedInput.startsWith(`${trigger} `));
 
+  // Check for quiz trigger FIRST - before greeting/thanks can match
+  if (
+    quizTriggers.some((trigger) => normalizedInput.includes(trigger)) ||
+    (tokens.has("checkup") && (tokens.has("security") || tokens.has("cybersecurity")))
+  ) {
+    return { type: "quiz-start" };
+  }
+
   if (identityTriggers.some((trigger) => normalizedInput.includes(trigger))) {
     return { type: "faq", ...buildIdentityResponse() };
   }
@@ -1272,6 +1280,76 @@ function getBotReply(userText) {
 
   if (isEmailSafeTriggers.some((trigger) => normalizedInput.includes(trigger))) {
     return { type: "faq", ...buildIsEmailSafeResponse() };
+  }
+
+  if (tipTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildTipResponse() };
+  }
+
+  if (hasGreeting && helpTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildHelpResponse() };
+  }
+
+  if (hasGreeting) {
+    return { type: "faq", ...buildGreetingResponse() };
+  }
+
+  if (thanksTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildThanksResponse() };
+  }
+
+  if (helpTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildHelpResponse() };
+  }
+
+  if (asksHow && tokens.has("password")) {
+    const topic = getTopicById("password");
+    return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: password" };
+  }
+
+  if ((tokens.has("phishing") || tokens.has("scam")) && (tokens.has("email") || tokens.has("emails") || tokens.has("message") || tokens.has("messages") || tokens.has("sms"))) {
+    const topic = getTopicById("phishing");
+    return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: phishing + email" };
+  }
+
+  const matchedTopic = findBestTopic(normalizedInput);
+  if (!matchedTopic) {
+    return { type: "faq", ...buildFallbackResponse() };
+  }
+
+  return {
+    type: "faq",
+    response: matchedTopic.response,
+    suggestions: matchedTopic.suggestions,
+    confidence: `matched keywords: ${Object.keys(matchedTopic.keywords).slice(0, 3).join(", ")}`
+  };
+}
+
+  if (forgotPasswordTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildForgotPasswordResponse() };
+  }
+
+  if (hackedTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildHackedResponse() };
+  }
+
+  if (clickedBadLinkTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildClickedBadLinkResponse() };
+  }
+
+  if (isEmailSafeTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildIsEmailSafeResponse() };
+  }
+
+  if (
+    quizTriggers.some((trigger) => normalizedInput.includes(trigger)) ||
+    (tokens.has("checkup") && (tokens.has("security") || tokens.has("cybersecurity")))
+  ) {
+    return { type: "quiz-start" };
+  }
+
+  if (tipTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildTipResponse() };
   }
 
   if (tipTriggers.some((trigger) => normalizedInput.includes(trigger))) {
