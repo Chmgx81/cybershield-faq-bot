@@ -1099,9 +1099,40 @@ button {
 }
 
 .workspace.chat-started .hero-composer {
+  display: none;
+}
+
+.chat-composer {
+  display: none;
   width: min(100%, 820px);
   margin: 0 auto;
-  box-shadow: none;
+  padding: 10px 12px;
+  align-items: center;
+  gap: 10px;
+  background: var(--panel);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.workspace.chat-started .chat-composer {
+  display: flex;
+}
+
+.chat-composer input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.chat-composer input::placeholder {
+  color: var(--text-faint);
+}
+
+.chat-composer input:focus {
+  outline: none;
 }
 
 .workspace.chat-started .chat-messages {

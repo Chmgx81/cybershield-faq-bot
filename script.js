@@ -911,9 +911,16 @@ function scrollChatToBottom(force = false) {
     if (scrollDownButton) {
       scrollDownButton.classList.remove("is-visible");
     }
-    window.requestAnimationFrame(() => {
+    // Multiple attempts to ensure scroll happens after content renders
+    if (chatMessages) {
       chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
+      setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 100);
+      setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 250);
+    }
   }
 }
 
@@ -994,12 +1001,42 @@ function storeCurrentSessionNodes() {
     return;
   }
 
-  activeSession.nodes = Array.from(chatMessages.children);
+  // Store message data instead of DOM elements (they can't be serialized)
+  const messages = [];
+  chatMessages.querySelectorAll(".message").forEach((msg) => {
+    const role = msg.classList.contains("user") ? "user" : "bot";
+    const bubble = msg.querySelector(".message-bubble");
+    if (!bubble) return;
+    
+    const paragraphs = [];
+    bubble.querySelectorAll("p").forEach((p) => paragraphs.push(p.textContent));
+    
+    const suggestions = [];
+    bubble.querySelectorAll(".quick-reply").forEach((btn) => suggestions.push(btn.textContent));
+    
+    const confidenceEl = bubble.querySelector(".confidence-badge");
+    const confidence = confidenceEl ? confidenceEl.textContent.replace("Match: ", "") : null;
+    
+    messages.push({ role, content: paragraphs, suggestions, confidence });
+  });
+  
+  activeSession.messages = messages;
   chatMessages.replaceChildren();
 }
 
 function restoreSessionNodes(session) {
-  chatMessages.replaceChildren(...session.nodes);
+  if (!session.messages || !session.messages.length) {
+    renderHistory();
+    return;
+  }
+  
+  session.messages.forEach((msg) => {
+    addMessage(msg.role, msg.content.join("\n"), {
+      suggestions: msg.suggestions,
+      confidence: msg.confidence
+    });
+  });
+  
   refreshIcons();
   scrollChatToBottom();
   renderHistory();
@@ -1321,7 +1358,7 @@ function addMessage(role, content, options = {}) {
   chatMessages.appendChild(messageElement);
   syncActiveSessionState();
   refreshIcons();
-  scrollChatToBottom(role === "user");
+  scrollChatToBottom(true);
   return messageElement;
 }
 

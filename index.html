@@ -176,13 +176,28 @@
             </div>
           </div>
         </form>
-
-        <div class="hero-suggestions" aria-label="Suggested topics">
-          <button type="button" class="suggestion-pill" data-prompt="How do I spot phishing emails?">Phishing FAQ</button>
-          <button type="button" class="suggestion-pill" data-prompt="Tell me about password security">Password FAQ</button>
-          <button type="button" class="suggestion-pill" data-prompt="How do I protect my phone?">Mobile FAQ</button>
-        </div>
       </section>
+
+      <form id="chatFormActive" class="chat-composer">
+        <label class="sr-only" for="userInputActive">Ask a cybersecurity question</label>
+        <input
+          id="userInputActive"
+          name="message"
+          type="text"
+          maxlength="500"
+          placeholder="Ask a cybersecurity question..."
+          autocomplete="off"
+        >
+
+        <div class="composer-row">
+          <div class="composer-actions-right">
+            <button id="sendButtonActive" type="submit" class="composer-submit" aria-label="Send message">
+              <i data-feather="arrow-up"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
     </section>
 
     <button type="button" id="scrollDownButton" class="scroll-down-button" aria-label="Scroll to latest message">
