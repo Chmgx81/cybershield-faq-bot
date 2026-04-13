@@ -1714,8 +1714,16 @@ function handleUserMessage(rawInput) {
   }
 
   if (!hasStartedConversation) {
-    currentChatTitle = summarizeChatTitle(trimmedInput);
-    createSession(currentChatTitle);
+    const activeSession = getSessionById(activeSessionId);
+    if (activeSession && activeSession.title === "New conversation") {
+      currentChatTitle = summarizeChatTitle(trimmedInput);
+      activeSession.title = currentChatTitle;
+      currentChatTitle = activeSession.title;
+      saveSessionsToStorage();
+    } else {
+      currentChatTitle = summarizeChatTitle(trimmedInput);
+      createSession(currentChatTitle);
+    }
     renderHistory();
   }
 
