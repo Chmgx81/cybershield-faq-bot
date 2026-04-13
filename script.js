@@ -24,6 +24,47 @@ let nextSessionId = 1;
 let pendingBotTimeouts = [];
 const chatSessions = [];
 
+const STORAGE_KEY = "cybershield_sessions";
+const SESSION_NEXT_ID_KEY = "cybershield_next_id";
+
+function loadSessionsFromStorage() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const nextId = localStorage.getItem(SESSION_NEXT_ID_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      parsed.forEach(session => {
+        chatSessions.push(session);
+      });
+    }
+    if (nextId) {
+      nextSessionId = parseInt(nextId, 10);
+    }
+  } catch (e) {
+    console.warn("Failed to load sessions from storage", e);
+  }
+}
+
+function saveSessionsToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chatSessions));
+    localStorage.setItem(SESSION_NEXT_ID_KEY, String(nextSessionId));
+  } catch (e) {
+    console.warn("Failed to save sessions to storage", e);
+  }
+}
+
+function clearSessionsFromStorage() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(SESSION_NEXT_ID_KEY);
+  } catch (e) {
+    console.warn("Failed to clear sessions from storage", e);
+  }
+}
+
+loadSessionsFromStorage();
+
 const faqTopics = [
   {
     id: "password",
@@ -762,6 +803,7 @@ function createSession(title) {
 
   nextSessionId += 1;
   chatSessions.unshift(session);
+  saveSessionsToStorage();
   activeSessionId = session.id;
   currentChatTitle = session.title;
   return session;
@@ -1104,13 +1146,31 @@ function findBestTopic(normalizedInput) {
 }
 
 function buildGreetingResponse() {
-  const greetings = [
-    "Hi, I'm CyberShield, your cybersecurity FAQ assistant.",
-    "I can give quick, practical answers on phishing, passwords, safe browsing, mobile security, incidents, and practical everyday protection.",
-    "Ask me something specific like \"How do I spot phishing emails?\" or use one of the suggested prompts below."
+  const greetingSets = [
+    [
+      "Hi, I'm CyberShield, your cybersecurity FAQ assistant.",
+      "I can give quick, practical answers on phishing, passwords, safe browsing, mobile security, incidents, and practical everyday protection.",
+      "Ask me something specific like \"How do I spot phishing emails?\" or use one of the suggested prompts below."
+    ],
+    [
+      "Hello! I'm CyberShield, here to help with cybersecurity questions.",
+      "I cover topics like password safety, phishing detection, safe browsing, mobile security, and more.",
+      "Try asking \"How do I spot phishing emails?\" or click one of the suggestions below."
+    ],
+    [
+      "Welcome! I'm your cybersecurity assistant, CyberShield.",
+      "I can help you understand phishing, passwords, device security, and everyday protection practices.",
+      "Feel free to ask questions like \"What makes a strong password?\" or use the quick options below."
+    ],
+    [
+      "Hey there! I'm CyberShield, ready to answer your security questions.",
+      "From spotting phishing to securing your devices, I've got practical advice to share.",
+      "Ask me anything about cybersecurity or pick a topic from the suggestions."
+    ]
   ];
+  const selected = greetingSets[Math.floor(Math.random() * greetingSets.length)];
   return {
-    response: greetings,
+    response: selected,
     suggestions: ["How do I spot phishing emails?", "Strong password tips", "Start the security quiz"],
     confidence: "greeting pattern match"
   };
@@ -1129,11 +1189,27 @@ function buildHelpResponse() {
 }
 
 function buildThanksResponse() {
-  return {
-    response: [
+  const thanksSets = [
+    [
       "You're welcome.",
       "If you want, keep going with another cybersecurity question and I'll stay focused on practical next steps."
     ],
+    [
+      "Happy to help!",
+      "Let me know if you have more security questions or want to take the security quiz."
+    ],
+    [
+      "No problem!",
+      "Stay safe online! Feel free to ask more questions whenever you're ready."
+    ],
+    [
+      "Anytime!",
+      "Cybersecurity is important, so I'm glad to help. Keep those questions coming!"
+    ]
+  ];
+  const selected = thanksSets[Math.floor(Math.random() * thanksSets.length)];
+  return {
+    response: selected,
     suggestions: ["How can I browse safely?", "What should I do after a breach?", "Check my security habits"],
     confidence: "thanks keyword match"
   };
@@ -1516,6 +1592,12 @@ function startNewConversation() {
 }
 
 function deleteSession(sessionId) {
+  const session = chatSessions.find(s => s.id === sessionId);
+  if (!session) return;
+  
+  const confirmed = confirm(`Delete "${session.title}"?\n\nThis chat will be permanently removed.`);
+  if (!confirmed) return;
+  
   cancelPendingBotResponses();
 
   const sessionIndex = chatSessions.findIndex((session) => session.id === sessionId);
@@ -1523,8 +1605,8 @@ function deleteSession(sessionId) {
     return;
   }
 
-  const isActiveSession = activeSessionId === sessionId;
   chatSessions.splice(sessionIndex, 1);
+  saveSessionsToStorage();
 
   if (!isActiveSession) {
     renderHistory();
@@ -1542,8 +1624,14 @@ function deleteSession(sessionId) {
 }
 
 function clearAllSessions() {
+  if (chatSessions.length === 0) return;
+  
+  const confirmed = confirm(`⚠️ DELETE ALL CHATS?\n\nThis action CANNOT be undone!\n\nAll your chat history will be permanently deleted and cannot be recovered.\n\nAre you absolutely sure you want to continue?`);
+  if (!confirmed) return;
+  
   cancelPendingBotResponses();
   chatSessions.splice(0, chatSessions.length);
+  clearSessionsFromStorage();
   resetToBlankComposer();
 }
 
@@ -1655,13 +1743,6 @@ if (newChatButton) {
   });
 }
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && appShell.classList.contains("sidebar-open")) {
-    appShell.classList.remove("sidebar-open");
-    syncNavigationState();
-  }
-});
-
 if (chatMessages && scrollDownButton) {
   chatMessages.addEventListener("scroll", () => {
     const scrollBottom = chatMessages.scrollTop + chatMessages.clientHeight;
@@ -1679,6 +1760,24 @@ if (chatMessages && scrollDownButton) {
     scrollChatToBottom(true);
   });
 }
+
+document.addEventListener("keydown", (event) => {
+  if (event.ctrlKey || event.metaKey) {
+    if (event.key === "n" || event.key === "N") {
+      event.preventDefault();
+      startNewConversation();
+    }
+    if (event.key === "k" || event.key === "K") {
+      event.preventDefault();
+      userInput.focus();
+    }
+  }
+  
+  if (event.key === "Escape" && appShell.classList.contains("sidebar-open")) {
+    appShell.classList.remove("sidebar-open");
+    syncNavigationState();
+  }
+});
 
 syncNavigationState();
 renderHistory();

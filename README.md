@@ -11,7 +11,8 @@ The goal of this project is to turn static cybersecurity FAQ content into an int
 - Rule-based cybersecurity FAQ chatbot with weighted keyword matching
 - Premium dark UI with responsive sidebar layout
 - Multiple in-browser chat sessions with history management
-- Chat history switching and deletion
+- Chat history switching and deletion with confirmation dialogs
+- **Persistent storage**: Chat sessions saved to localStorage and restored on reload
 - Quick reply suggestions after bot responses
 - Typing indicator for conversational feedback
 - Startup skeleton loading screen
@@ -19,6 +20,11 @@ The goal of this project is to turn static cybersecurity FAQ content into an int
 - Text normalization for handling typos and variations
 - Edge case handling for common scenarios
 - Security tips feature ("Did you know?")
+- Response variations for greetings and thanks (adds variety)
+- Keyboard shortcuts:
+  - `Ctrl+N` - New chat
+  - `Ctrl+K` - Focus input
+  - `Escape` - Close sidebar
 
 ## FAQ Topics Covered
 
@@ -85,8 +91,9 @@ At the end, it calculates a score and shows a recommendation card based on the u
 
 - **Keyword Matching**: Weighted scoring system that considers keyword frequency and importance
 - **Text Normalization**: Handles 20+ common typos and phrase variations
-- **Session Management**: Multiple chat sessions stored in browser memory
+- **Session Management**: Multiple chat sessions with localStorage persistence
 - **Quiz Scoring**: 0-2 scale per question, categorized into low/medium/high security posture
+- **Keyboard Shortcuts**: Ctrl+N for new chat, Ctrl+K to focus input
 
 ## Files
 
@@ -103,7 +110,7 @@ This project is deployed and accessible at: **https://chmgx81.github.io/cybershi
 ## Limitations
 
 - No backend or database
-- No persistent storage across browser reloads
+- Sessions stored in browser localStorage (cleared when browser data is cleared)
 - No real AI or NLP model
 - Responses are limited to predefined FAQ content and interaction rules
 
