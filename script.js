@@ -1840,6 +1840,9 @@ function buildQuizCategoryCard() {
 function startQuizFlow(fromMenu = false) {
   resetQuizState();
   
+  // Hide hero section without setting conversation mode
+  workspace.classList.add("chat-started");
+  
   // Clear any existing quiz/score cards before starting fresh
   chatMessages.querySelectorAll(".message").forEach((msg) => {
     const bubble = msg.querySelector(".message-bubble");
@@ -2098,6 +2101,7 @@ promptButtons.forEach((button) => {
   button.addEventListener("click", () => {
     // Handle quiz menu trigger separately
     if (button.dataset.quizMenu === "true") {
+      setConversationMode(true);
       startNewConversation();
       setTimeout(() => {
         startQuizFlow(true);
