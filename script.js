@@ -13,6 +13,14 @@ const appSkeleton = document.querySelector("#appSkeleton");
 const chatHistory = document.querySelector("#chatHistory");
 const clearHistoryButton = document.querySelector("#clearHistoryButton");
 const scrollDownButton = document.querySelector("#scrollDownButton");
+const confirmModal = document.querySelector("#confirmModal");
+const modalTitle = document.querySelector("#modalTitle");
+const modalMessage = document.querySelector("#modalMessage");
+const modalIcon = document.querySelector("#modalIcon");
+const modalCancel = document.querySelector("#modalCancel");
+const modalConfirm = document.querySelector("#modalConfirm");
+
+let modalResolve = null;
 
 let isAtBottom = true;
 
@@ -1591,48 +1599,97 @@ function startNewConversation() {
   resetToBlankComposer();
 }
 
+function showConfirmModal(options) {
+  return new Promise((resolve) => {
+    modalResolve = resolve;
+    
+    modalTitle.textContent = options.title || "Confirm";
+    modalMessage.textContent = options.message || "Are you sure?";
+    
+    modalConfirm.classList.remove("modal-btn-danger");
+    if (options.danger) {
+      modalConfirm.classList.add("modal-btn-danger");
+      modalConfirm.textContent = options.dangerText || "Delete";
+    } else {
+      modalConfirm.textContent = options.confirmText || "Confirm";
+    }
+    
+    modalConfirm.onclick = () => {
+      confirmModal.close();
+      modalResolve(true);
+    };
+    
+    modalCancel.onclick = () => {
+      confirmModal.close();
+      modalResolve(false);
+    };
+    
+    confirmModal.onclose = () => {
+      if (modalResolve) {
+        modalResolve(false);
+        modalResolve = null;
+      }
+    };
+    
+    confirmModal.showModal();
+  });
+}
+
 function deleteSession(sessionId) {
   const session = chatSessions.find(s => s.id === sessionId);
   if (!session) return;
   
-  const confirmed = confirm(`Delete "${session.title}"?\n\nThis chat will be permanently removed.`);
-  if (!confirmed) return;
-  
-  cancelPendingBotResponses();
+  showConfirmModal({
+    title: "Delete Chat",
+    message: `Delete "${session.title}"?\n\nThis chat will be permanently removed.`,
+    danger: true,
+    dangerText: "Delete"
+  }).then((confirmed) => {
+    if (!confirmed) return;
+    
+    cancelPendingBotResponses();
 
-  const sessionIndex = chatSessions.findIndex((session) => session.id === sessionId);
-  if (sessionIndex === -1) {
-    return;
-  }
+    const sessionIndex = chatSessions.findIndex((s) => s.id === sessionId);
+    if (sessionIndex === -1) {
+      return;
+    }
 
-  chatSessions.splice(sessionIndex, 1);
-  saveSessionsToStorage();
+    chatSessions.splice(sessionIndex, 1);
+    saveSessionsToStorage();
 
-  if (!isActiveSession) {
-    renderHistory();
-    return;
-  }
+    const isActiveSession = activeSessionId === sessionId;
+    if (!isActiveSession) {
+      renderHistory();
+      return;
+    }
 
-  const nextSession = chatSessions[0] || null;
-  if (!nextSession) {
-    resetToBlankComposer();
-    return;
-  }
+    const nextSession = chatSessions[0] || null;
+    if (!nextSession) {
+      resetToBlankComposer();
+      return;
+    }
 
-  activeSessionId = null;
-  openSession(nextSession.id);
+    activeSessionId = null;
+    openSession(nextSession.id);
+  });
 }
 
 function clearAllSessions() {
   if (chatSessions.length === 0) return;
   
-  const confirmed = confirm(`⚠️ DELETE ALL CHATS?\n\nThis action CANNOT be undone!\n\nAll your chat history will be permanently deleted and cannot be recovered.\n\nAre you absolutely sure you want to continue?`);
-  if (!confirmed) return;
-  
-  cancelPendingBotResponses();
-  chatSessions.splice(0, chatSessions.length);
-  clearSessionsFromStorage();
-  resetToBlankComposer();
+  showConfirmModal({
+    title: "⚠️ Delete All Chats",
+    message: "This action CANNOT be undone!\n\nAll your chat history will be permanently deleted and cannot be recovered.\n\nAre you absolutely sure you want to continue?",
+    danger: true,
+    dangerText: "Delete All"
+  }).then((confirmed) => {
+    if (!confirmed) return;
+    
+    cancelPendingBotResponses();
+    chatSessions.splice(0, chatSessions.length);
+    clearSessionsFromStorage();
+    resetToBlankComposer();
+  });
 }
 
 function handleUserMessage(rawInput) {
