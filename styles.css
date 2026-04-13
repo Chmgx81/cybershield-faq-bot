@@ -1091,17 +1091,11 @@ button {
 }
 
 .workspace.chat-started .hero {
-  order: 5;
-  padding: 0 24px 14px;
-  margin-top: auto;
-  position: sticky;
-  bottom: 0;
-  background: var(--page);
+  display: none;
 }
 
-.workspace.chat-started .hero-copy,
-.workspace.chat-started .hero-suggestions {
-  display: none;
+.workspace.chat-started .privacy-banner {
+  margin-bottom: 0;
 }
 
 .workspace.chat-started .hero-composer {
