@@ -1318,17 +1318,33 @@ button {
 
 .modal {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 0;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow);
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal::backdrop {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
+}
+
+.modal[open] {
+  animation: modalIn 0.2s ease-out;
 }
 
 .modal-content {
@@ -1340,7 +1356,8 @@ button {
   width: 48px;
   height: 48px;
   margin: 0 auto 16px;
-  background: rgba(34, 197, 94, 0.1);
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -1350,19 +1367,19 @@ button {
 .modal-icon .bot-icon {
   width: 28px;
   height: 28px;
-  color: var(--accent-color);
+  color: var(--accent-cyan);
 }
 
 .modal-title {
   font-size: 18px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text);
   margin: 0 0 8px;
 }
 
 .modal-message {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--text-soft);
   margin: 0 0 24px;
   line-height: 1.5;
 }
@@ -1386,15 +1403,15 @@ button {
 
 .modal-btn-cancel {
   background: var(--bg-hover);
-  color: var(--text-primary);
+  color: var(--text);
 }
 
 .modal-btn-cancel:hover {
-  background: var(--border-color);
+  background: var(--line);
 }
 
 .modal-btn-confirm {
-  background: var(--accent-color);
+  background: var(--accent-cyan);
   color: #000;
 }
 
