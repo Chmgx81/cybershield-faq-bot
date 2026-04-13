@@ -545,93 +545,300 @@ const faqTopics = [
   }
 ];
 
-const quizQuestions = [
+const quizCategories = [
   {
-    question: "Do you use unique passwords for important accounts?",
-    options: [
-      { label: "Yes, and I store them in a password manager", score: 2 },
-      { label: "Some are unique, but I still reuse a few", score: 1 },
-      { label: "I mostly reuse the same password", score: 0 }
+    id: "general",
+    name: "General Security",
+    description: "Test your overall cybersecurity habits",
+    questions: [
+      {
+        question: "Do you use unique passwords for important accounts?",
+        options: [
+          { label: "Yes, and I store them in a password manager", score: 2 },
+          { label: "Some are unique, but I still reuse a few", score: 1 },
+          { label: "I mostly reuse the same password", score: 0 }
+        ]
+      },
+      {
+        question: "How often do you enable MFA when it is available?",
+        options: [
+          { label: "Almost always", score: 2 },
+          { label: "Only on a few key accounts", score: 1 },
+          { label: "Rarely or never", score: 0 }
+        ]
+      },
+      {
+        question: "What do you do with unexpected links or attachments?",
+        options: [
+          { label: "Verify first and avoid opening suspicious content", score: 2 },
+          { label: "I open them if they look familiar", score: 1 },
+          { label: "I usually click without checking", score: 0 }
+        ]
+      },
+      {
+        question: "How current are your device and app updates?",
+        options: [
+          { label: "Automatic updates are enabled or I patch quickly", score: 2 },
+          { label: "I update sometimes when I remember", score: 1 },
+          { label: "I often postpone updates for a long time", score: 0 }
+        ]
+      },
+      {
+        question: "How do you handle important files or data?",
+        options: [
+          { label: "I back them up and protect sensitive data", score: 2 },
+          { label: "I back up only a few things", score: 1 },
+          { label: "I do not keep reliable backups", score: 0 }
+        ]
+      }
     ]
   },
   {
-    question: "How often do you enable MFA when it is available?",
-    options: [
-      { label: "Almost always", score: 2 },
-      { label: "Only on a few key accounts", score: 1 },
-      { label: "Rarely or never", score: 0 }
+    id: "phishing",
+    name: "Phishing Awareness",
+    description: "Test your ability to spot phishing attempts",
+    questions: [
+      {
+        question: "What do you do when you receive an unexpected email asking for personal information?",
+        options: [
+          { label: "I verify by contacting the company directly through official channels", score: 2 },
+          { label: "I check if the email looks legitimate before responding", score: 1 },
+          { label: "I respond if it seems important", score: 0 }
+        ]
+      },
+      {
+        question: "How do you handle links in suspicious emails?",
+        options: [
+          { label: "I never click, I go directly to the website instead", score: 2 },
+          { label: "I hover over them to check the URL first", score: 1 },
+          { label: "I click if the subject line looks urgent", score: 0 }
+        ]
+      },
+      {
+        question: "What red flags do you look for in emails?",
+        options: [
+          { label: "Mismatched sender addresses, urgent language, and requests for credentials", score: 2 },
+          { label: "Poor grammar and suspicious links", score: 1 },
+          { label: "I don't really check for red flags", score: 0 }
+        ]
+      },
+      {
+        question: "If you receive an invoice you weren't expecting, what do you do?",
+        options: [
+          { label: "Verify with the sender through a different channel before opening", score: 2 },
+          { label: "Check if I recognize the company first", score: 1 },
+          { label: "Open it to see what it is", score: 0 }
+        ]
+      },
+      {
+        question: "How do you handle urgent emails demanding immediate action?",
+        options: [
+          { label: "I slow down and verify through official channels", score: 2 },
+          { label: "I check if it's from someone I know", score: 1 },
+          { label: "I act immediately because it seems important", score: 0 }
+        ]
+      }
     ]
   },
   {
-    question: "What do you do with unexpected links or attachments?",
-    options: [
-      { label: "Verify first and avoid opening suspicious content", score: 2 },
-      { label: "I open them if they look familiar", score: 1 },
-      { label: "I usually click without checking", score: 0 }
+    id: "password",
+    name: "Password Security",
+    description: "Test your password habits",
+    questions: [
+      {
+        question: "How do you create passwords for important accounts?",
+        options: [
+          { label: "I use a unique passphrase for each account stored in a password manager", score: 2 },
+          { label: "I create variations of the same password", score: 1 },
+          { label: "I use the same password for most accounts", score: 0 }
+        ]
+      },
+      {
+        question: "What makes a strong password in your opinion?",
+        options: [
+          { label: "Long, unique phrases with special characters", score: 2 },
+          { label: "A mix of letters, numbers, and symbols", score: 1 },
+          { label: "Something easy to remember", score: 0 }
+        ]
+      },
+      {
+        question: "How do you store your passwords?",
+        options: [
+          { label: "Password manager", score: 2 },
+          { label: "Written in a secure place or browser", score: 1 },
+          { label: "In my head or on a note", score: 0 }
+        ]
+      },
+      {
+        question: "When should you change your password?",
+        options: [
+          { label: "When there's a breach or suspicious activity", score: 2 },
+          { label: "Every 6-12 months routinely", score: 1 },
+          { label: "Only when I can't log in", score: 0 }
+        ]
+      },
+      {
+        question: "What's your approach to password recovery questions?",
+        options: [
+          { label: "I use unique answers that aren't related to the real information", score: 2 },
+          { label: "I give accurate but not easily guessable answers", score: 1 },
+          { label: "I use real information that's easy to remember", score: 0 }
+        ]
+      }
     ]
   },
   {
-    question: "How current are your device and app updates?",
-    options: [
-      { label: "Automatic updates are enabled or I patch quickly", score: 2 },
-      { label: "I update sometimes when I remember", score: 1 },
-      { label: "I often postpone updates for a long time", score: 0 }
+    id: "mobile",
+    name: "Mobile Security",
+    description: "Test your mobile device security habits",
+    questions: [
+      {
+        question: "How do you protect your phone from unauthorized access?",
+        options: [
+          { label: "Strong PIN/biometric and auto-lock enabled", score: 2 },
+          { label: "PIN but sometimes I leave it unlocked", score: 1 },
+          { label: "I don't use a lock", score: 0 }
+        ]
+      },
+      {
+        question: "Where do you install apps from?",
+        options: [
+          { label: "Only official app stores (Play Store, App Store)", score: 2 },
+          { label: "Mostly official stores, occasionally APKs", score: 1 },
+          { label: "I download from any website", score: 0 }
+        ]
+      },
+      {
+        question: "What do you do with apps you no longer use?",
+        options: [
+          { label: "I delete them and review permissions regularly", score: 2 },
+          { label: "I delete them but don't check permissions", score: 1 },
+          { label: "I just leave them on my phone", score: 0 }
+        ]
+      },
+      {
+        question: "How do you handle public WiFi on your phone?",
+        options: [
+          { label: "I use a VPN when on public networks", score: 2 },
+          { label: "I'm careful but don't always use a VPN", score: 1 },
+          { label: "I use it normally without precautions", score: 0 }
+        ]
+      },
+      {
+        question: "If your phone was lost/stolen, what would happen?",
+        options: [
+          { label: "I can remotely locate and wipe it", score: 2 },
+          { label: "I could try to find it but can't wipe it", score: 1 },
+          { label: "I'd lose all my data", score: 0 }
+        ]
+      }
     ]
   },
   {
-    question: "How do you handle important files or data?",
-    options: [
-      { label: "I back them up and protect sensitive data", score: 2 },
-      { label: "I back up only a few things", score: 1 },
-      { label: "I do not keep reliable backups", score: 0 }
+    id: "socialmedia",
+    name: "Social Media Security",
+    description: "Test your social media privacy habits",
+    questions: [
+      {
+        question: "Who can see your social media posts?",
+        options: [
+          { label: "Only friends, with privacy settings regularly reviewed", score: 2 },
+          { label: "Friends of friends or public to some extent", score: 1 },
+          { label: "Everyone/public", score: 0 }
+        ]
+      },
+      {
+        question: "What personal information do you share online?",
+        options: [
+          { label: "Minimal - no address, phone, or vacation plans", score: 2 },
+          { label: "Some basic info but not sensitive details", score: 1 },
+          { label: "I share a lot of personal information", score: 0 }
+        ]
+      },
+      {
+        question: "How do you handle friend requests from people you don't know?",
+        options: [
+          { label: "I decline - only connect with people I know", score: 2 },
+          { label: "I check their profile before deciding", score: 1 },
+          { label: "I accept most requests", score: 0 }
+        ]
+      },
+      {
+        question: "Do you use different passwords for different social media accounts?",
+        options: [
+          { label: "Yes, each has a unique password", score: 2 },
+          { label: "Some are the same, some different", score: 1 },
+          { label: "I use the same password for all", score: 0 }
+        ]
+      },
+      {
+        question: "What do you do with suspicious messages from friends?",
+        options: [
+          { label: "Verify through another channel - could be a hacked account", score: 2 },
+          { label: "Ask them about it in the chat", score: 1 },
+          { label: "Click the link if it looks interesting", score: 0 }
+        ]
+      }
     ]
   },
   {
-    question: "If an account or device seems compromised, what is your first move?",
-    options: [
-      { label: "Isolate it, report it, and reset from a safe device", score: 2 },
-      { label: "I would probably change a password and hope it is enough", score: 1 },
-      { label: "I am not sure what I would do", score: 0 }
-    ]
-  },
-  {
-    question: "When using public WiFi, what do you typically do?",
-    options: [
-      { label: "I use a VPN for any sensitive activity", score: 2 },
-      { label: "I am careful but don't always use a VPN", score: 1 },
-      { label: "I use it normally without extra precautions", score: 0 }
-    ]
-  },
-  {
-    question: "How do you handle social media privacy settings?",
-    options: [
-      { label: "I regularly review and adjust my privacy settings", score: 2 },
-      { label: "I set them once and rarely check again", score: 1 },
-      { label: "I keep default settings", score: 0 }
-    ]
-  },
-  {
-    question: "What do you do before downloading files from the internet?",
-    options: [
-      { label: "I verify the source and scan if possible", score: 2 },
-      { label: "I check if it looks legitimate", score: 1 },
-      { label: "I download if I need it", score: 0 }
-    ]
-  },
-  {
-    question: "How do you handle software and browser extensions?",
-    options: [
-      { label: "I limit extensions and keep them updated", score: 2 },
-      { label: "I have several but rarely check them", score: 1 },
-      { label: "I install whatever seems useful", score: 0 }
+    id: "wifi",
+    name: "WiFi & Network Security",
+    description: "Test your wireless security habits",
+    questions: [
+      {
+        question: "What do you do when connecting to public WiFi?",
+        options: [
+          { label: "I always use a VPN", score: 2 },
+          { label: "I'm careful about what I access", score: 1 },
+          { label: "I use it normally for everything", score: 0 }
+        ]
+      },
+      {
+        question: "How secure is your home WiFi?",
+        options: [
+          { label: "WPA3/WPA2 with a strong unique password", score: 2 },
+          { label: "WPA2 but default or weak password", score: 1 },
+          { label: "WEP or no password", score: 0 }
+        ]
+      },
+      {
+        question: "Do you change your router's default admin credentials?",
+        options: [
+          { label: "Yes, immediately after setup", score: 2 },
+          { label: "I planned to but haven't yet", score: 1 },
+          { label: "No, I use the defaults", score: 0 }
+        ]
+      },
+      {
+        question: "When working remotely, how do you access company resources?",
+        options: [
+          { label: "Always through the company VPN", score: 2 },
+          { label: "Usually, but not always", score: 1 },
+          { label: "I just connect directly", score: 0 }
+        ]
+      },
+      {
+        question: "What do you do with unknown USB drives you find?",
+        options: [
+          { label: "Never plug them in - could be malicious", score: 2 },
+          { label: "Scan with antivirus first", score: 1 },
+          { label: "Plug in to see what's on them", score: 0 }
+        ]
+      }
     ]
   }
 ];
 
+const quizQuestions = quizCategories.reduce((all, cat) => {
+  return all.concat(cat.questions);
+}, []);
+
 const quizState = {
   active: false,
   currentIndex: 0,
-  answers: []
+  answers: [],
+  selectedCategory: null
 };
 
 const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security", "security quiz", "take a quiz", "start quiz", "security checkup", "checkup", "take the quiz", "do a quiz"];
@@ -1417,20 +1624,24 @@ function resetQuizState() {
 }
 
 function buildQuizQuestionCard() {
-  const question = quizQuestions[quizState.currentIndex];
+  const currentCategory = quizCategories[quizState.selectedCategory] || quizCategories[0];
+  const categoryQuestions = currentCategory.questions;
+  const questionIndex = quizState.currentIndex;
+  
+  const question = categoryQuestions[questionIndex];
   const wrapper = document.createElement("div");
   wrapper.className = "quiz-card";
 
   const meta = document.createElement("div");
   meta.className = "quiz-meta";
-  meta.innerHTML = `<span>Security Checkup</span><span>Question ${quizState.currentIndex + 1} of ${quizQuestions.length}</span>`;
+  meta.innerHTML = `<span>${currentCategory.name}</span><span>Question ${questionIndex + 1} of ${categoryQuestions.length}</span>`;
   wrapper.appendChild(meta);
 
   const progress = document.createElement("div");
   progress.className = "quiz-progress";
   const progressBar = document.createElement("div");
   progressBar.className = "quiz-progress-bar";
-  progressBar.style.width = `${((quizState.currentIndex + 1) / quizQuestions.length) * 100}%`;
+  progressBar.style.width = `${((questionIndex + 1) / categoryQuestions.length) * 100}%`;
   progress.appendChild(progressBar);
   wrapper.appendChild(progress);
 
@@ -1457,7 +1668,7 @@ function buildQuizQuestionCard() {
       }
       
       quizState.currentIndex += 1;
-      if (quizState.currentIndex < quizQuestions.length) {
+      if (quizState.currentIndex < categoryQuestions.length) {
         addBotMessageWithDelay(() => {
           addMessage("bot", buildQuizQuestionCard());
         });
@@ -1503,8 +1714,11 @@ function getQuizRecommendations(scoreBand) {
 }
 
 function buildQuizResultsCard() {
+  const category = quizCategories[quizState.selectedCategory] || quizCategories[0];
+  const categoryQuestions = category.questions;
+  
   const totalScore = quizState.answers.reduce((sum, score) => sum + score, 0);
-  const maxScore = quizQuestions.length * 2;
+  const maxScore = categoryQuestions.length * 2;
   const percentage = Math.round((totalScore / maxScore) * 100);
 
   let scoreBand = "low";
@@ -1521,7 +1735,7 @@ function buildQuizResultsCard() {
   wrapper.className = "score-card";
 
   const title = document.createElement("h3");
-  title.textContent = headline;
+  title.textContent = `${category.name}: ${headline}`;
   wrapper.appendChild(title);
 
   const badge = document.createElement("div");
@@ -1532,10 +1746,10 @@ function buildQuizResultsCard() {
   const summary = document.createElement("p");
   summary.textContent =
     scoreBand === "high"
-      ? "You already cover the main defensive habits. Keep refining your detection and recovery practices."
+      ? "You already cover the main defensive habits for this topic. Keep refining your practices."
       : scoreBand === "medium"
-        ? "Your security posture is improving, but a few habits are still leaving room for avoidable risk."
-        : "You have several high-value opportunities to reduce risk quickly with a few foundational changes.";
+        ? "Your security knowledge for this topic is improving, but there's room for improvement."
+        : "You have opportunities to strengthen your security habits in this area.";
   wrapper.appendChild(summary);
 
   const list = document.createElement("ul");
@@ -1547,6 +1761,54 @@ function buildQuizResultsCard() {
   });
   wrapper.appendChild(list);
 
+  return wrapper;
+}
+
+function buildQuizCategoryCard() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "quiz-card";
+
+  const meta = document.createElement("div");
+  meta.className = "quiz-meta";
+  meta.innerHTML = `<span>Security Checkup</span><span>Choose a category</span>`;
+  wrapper.appendChild(meta);
+
+  const prompt = document.createElement("p");
+  prompt.className = "quiz-question";
+  prompt.textContent = "Select a topic to test your security knowledge:";
+  wrapper.appendChild(prompt);
+
+  const options = document.createElement("div");
+  options.className = "quiz-options quiz-category-grid";
+
+  quizCategories.forEach((category, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "quiz-category-btn";
+    button.innerHTML = `<span class="category-name">${category.name}</span><span class="category-desc">${category.questions.length} questions</span>`;
+    button.addEventListener("click", () => {
+      quizState.selectedCategory = index;
+      quizState.currentIndex = 0;
+      quizState.answers = [];
+      
+      // Remove the category selection card
+      const currentMessage = wrapper.closest(".message");
+      if (currentMessage) {
+        currentMessage.remove();
+      }
+      
+      addBotMessageWithDelay(() => {
+        addMessage("bot", [
+          `Great choice! Let's test your ${category.name} knowledge.`,
+          "Answer each question based on your actual habits."
+        ]);
+        addMessage("bot", buildQuizQuestionCard());
+      });
+    });
+    options.appendChild(button);
+  });
+
+  wrapper.appendChild(options);
   return wrapper;
 }
 
@@ -1563,10 +1825,10 @@ function startQuizFlow() {
   
   addBotMessageWithDelay(() => {
     addMessage("bot", [
-      "Let's run a quick security checkup. Pick the answer that sounds most like your current habits.",
-      "I'll score the results and give you a few practical recommendations at the end."
+      "Let's run a security checkup!",
+      "Choose a category below to test your knowledge."
     ]);
-    addMessage("bot", buildQuizQuestionCard());
+    addMessage("bot", buildQuizCategoryCard());
   });
 }
 

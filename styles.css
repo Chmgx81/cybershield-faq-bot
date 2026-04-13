@@ -1000,6 +1000,41 @@ button {
   outline: none;
 }
 
+.quiz-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.quiz-category-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: #2a2a2a;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quiz-category-btn:hover,
+.quiz-category-btn:focus-visible {
+  background: #363636;
+  outline: none;
+}
+
+.quiz-category-btn .category-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.quiz-category-btn .category-desc {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
 .score-card h3 {
   margin: 0 0 10px;
   font-size: 20px;
