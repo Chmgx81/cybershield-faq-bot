@@ -72,18 +72,18 @@ If the input is unclear, the bot gives a guided fallback response instead of fai
 
 ## Security Checkup Quiz
 
-The app includes a 10-question rule-based quiz that assesses cybersecurity habits:
+The app includes a categorized quiz system that adapts to the conversation:
 
-- Unique password usage
-- Multi-factor authentication
-- Link and attachment handling
-- Software updates
-- Data backup practices
-- Incident response
-- Public WiFi usage
-- Social media privacy
-- File downloading habits
-- Browser extension management
+- **From Sidebar Menu**: User selects from 6 categories
+- **After Topic Question**: Quiz auto-selects the relevant category
+
+### Quiz Categories (5 questions each, 30 total)
+1. **General Security** - Overall cybersecurity habits
+2. **Phishing Awareness** - Spotting phishing attempts
+3. **Password Security** - Password management habits
+4. **Mobile Security** - Phone/device protection
+5. **Social Media Security** - Privacy on social platforms
+6. **WiFi & Network Security** - Wireless and network safety
 
 At the end, it calculates a score and shows a recommendation card based on the user's result with practical next steps.
 

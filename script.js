@@ -1646,6 +1646,7 @@ function resetQuizState() {
   quizState.active = true;
   quizState.currentIndex = 0;
   quizState.answers = [];
+  quizState.selectedCategory = null;
 }
 
 function buildQuizQuestionCard() {
@@ -1924,6 +1925,7 @@ function startNewConversation() {
   quizState.active = false;
   quizState.currentIndex = 0;
   quizState.answers = [];
+  quizState.selectedCategory = null;
   setConversationMode(false);
   userInput.focus();
 }
