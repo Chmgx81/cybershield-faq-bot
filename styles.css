@@ -60,12 +60,12 @@ button {
   position: absolute;
   inset: 0;
   z-index: 30;
-  display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  display: none;
   background: var(--page);
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.app-skeleton.is-hidden {
+  display: none;
 }
 
 .app-skeleton.is-hidden {
