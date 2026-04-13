@@ -1138,6 +1138,10 @@ button {
   }
 
   .sidebar-overlay {
+    display: none;
+  }
+
+  .app-shell.sidebar-open .sidebar-overlay {
     display: block;
     position: fixed;
     inset: 0;
