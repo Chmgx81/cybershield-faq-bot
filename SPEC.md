@@ -172,6 +172,7 @@ The app has two main interface states:
 
 The bot currently covers these FAQ topic groups:
 
+#### Core Topics
 1. Password Security
 2. Phishing Awareness
 3. Safe Browsing
@@ -180,9 +181,28 @@ The bot currently covers these FAQ topic groups:
 6. Mobile Security
 7. Incident Response
 8. General Best Practices
-9. Security Checkup Quiz
 
-### 4.3 Matching Logic
+#### Extended Topics
+9. Malware Protection
+10. WiFi Security
+11. Social Media Security
+12. Software Updates
+13. Two-Factor Authentication
+14. Remote Work Security
+15. Cloud Storage Security
+16. Browser Security
+17. Smart Device Security
+
+### 4.3 Edge Case Handlers
+
+The bot handles these special scenarios:
+- Forgotten password assistance
+- Hacked account response
+- Clicked bad link guidance
+- "Is this email safe?" verification
+- Security tips feature ("Give me a tip")
+
+### 4.4 Matching Logic
 
 The response engine uses lightweight browser-side logic:
 
@@ -222,7 +242,22 @@ The quiz may begin from prompts such as:
 - `rate my security`
 - `security checkup`
 
-### 5.2 Quiz Flow
+### 5.2 Quiz Questions
+
+The security checkup quiz contains 10 questions covering:
+
+1. Unique password usage
+2. Multi-factor authentication adoption
+3. Link and attachment handling
+4. Software update frequency
+5. Data backup practices
+6. Incident response actions
+7. Public WiFi usage habits
+8. Social media privacy management
+9. File downloading safety
+10. Browser extension management
+
+### 5.3 Quiz Flow
 
 - user starts the quiz
 - bot introduces the checkup
@@ -267,11 +302,14 @@ The quiz may begin from prompts such as:
 - [x] Sidebar contains new-chat, shortcut, and chat-history controls
 - [x] Landing screen shows hero content and suggested FAQ prompts
 - [x] User can send messages with the button or Enter key
-- [x] Bot returns relevant responses for supported FAQ topics
+- [x] Bot returns relevant responses for all supported FAQ topics (18 topics)
+- [x] Extended topics (malware, WiFi, social media, updates, 2FA, remote work, cloud, browser, IoT) are covered
+- [x] Edge cases (forgot password, hacked account, clicked bad link, email safety check) are handled
+- [x] Security tips feature responds to "tip" and "did you know" prompts
 - [x] Greeting, help, identity, and fallback prompts are handled cleanly
 - [x] Bot replies show typing feedback before appearing
 - [x] Quick reply suggestions are clickable
-- [x] Security quiz can be started, completed, and restarted
+- [x] Security quiz can be started, completed, and restarted (10 questions)
 - [x] Quiz results display a score and recommendations
 - [x] Multiple chat sessions can be created and revisited
 - [x] Individual chats can be deleted

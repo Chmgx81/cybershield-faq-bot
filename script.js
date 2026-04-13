@@ -44,11 +44,20 @@ const faqTopics = [
       "2fa": 4,
       login: 2,
       credential: 3,
+      forgot: 3,
+      "forgot password": 5,
+      "forgotten password": 5,
+      "change password": 3,
+      "reset password": 4,
+      "password manager": 5,
+      "unique password": 4,
+      "same password": 3,
+      generate: 2,
     },
     response: [
-      "Use a unique passphrase for every account and store it in a password manager instead of reusing variations.",
-      "Turn on MFA wherever possible, especially for email, banking, and admin tools, because it blocks many credential-stuffing attacks.",
-      "If you think a password may be exposed, change it immediately and review recent account activity."
+      "Use a unique passphrase for every account and store it in a password manager instead of reusing variations. Reused passwords are the leading cause of account breaches—when one service gets compromised, attackers use automated tools to try the same credentials everywhere.",
+      "Turn on MFA wherever possible, especially for email, banking, and admin tools, because it blocks most credential-stuffing attacks. Even if someone steals your password, they cannot access your account without the second factor.",
+      "If you think a password may be exposed, change it immediately and review recent account activity. Check for unknown devices or locations in your account's security settings, and enable alerts for new logins."
     ],
     suggestions: ["How do I spot phishing emails?", "What should I do after a breach?", "Give me a security checklist"]
   },
@@ -70,11 +79,20 @@ const faqTopics = [
       urgent: 2,
       impersonation: 4,
       spoof: 4,
+      "spam": 2,
+      "junk": 1,
+      "phish": 5,
+      "fishing": 1,
+      "is this safe": 4,
+      "is this legitimate": 4,
+      "real email": 3,
+      "check email": 3,
+      "verify email": 4,
     },
     response: [
-      "Treat unexpected urgency, mismatched sender addresses, and requests for credentials or payments as phishing red flags.",
-      "Hover over links before clicking, verify unusual requests through a second channel, and avoid opening unexpected attachments.",
-      "If a message feels off, report it instead of interacting with it."
+      "Treat unexpected urgency, mismatched sender addresses, and requests for credentials or payments as phishing red flags. Attackers create false urgency to make you act without thinking—legitimate organizations rarely demand immediate action via email.",
+      "Hover over links before clicking to see the actual URL destination, verify unusual requests through a second channel (call the company directly using their official number), and avoid opening unexpected attachments, especially Office documents or compressed files.",
+      "If a message feels off, report it to your email provider or IT team instead of interacting with it. Most email platforms have easy reporting tools that help improve spam filters for everyone."
     ],
     suggestions: ["How can I browse safely?", "How do I report an incident?", "Start the security quiz"]
   },
@@ -97,11 +115,16 @@ const faqTopics = [
       extension: 2,
       ads: 1,
       link: 2,
+      "private browsing": 4,
+      "incognito": 3,
+      "ad blocker": 3,
+      "pop up": 2,
+      "suspicious website": 4,
     },
     response: [
-      "Keep your browser updated, prefer HTTPS sites, and avoid downloading software or documents from unknown sources.",
-      "Be careful on public Wi-Fi and use a trusted VPN when handling sensitive accounts outside secure networks.",
-      "Limit browser extensions to reputable tools because extensions can read a surprising amount of data."
+      "Keep your browser updated, prefer HTTPS sites (look for the padlock icon in the address bar), and avoid downloading software or documents from unknown sources. Browser updates patch critical security vulnerabilities that attackers actively exploit.",
+      "Be careful on public Wi-Fi and use a trusted VPN when handling sensitive accounts outside secure networks. Public Wi-Fi can be monitored by anyone nearby—avoid logging into banking or work accounts on untrusted networks.",
+      "Limit browser extensions to reputable tools because extensions can read a surprising amount of data. Review extension permissions regularly and remove any you no longer use."
     ],
     suggestions: ["How should I protect my data?", "What about mobile security?", "How do I create strong passwords?"]
   },
@@ -123,11 +146,18 @@ const faqTopics = [
       usb: 2,
       confidential: 3,
       leak: 3,
+      "data loss": 3,
+      "important files": 3,
+      "sensitive": 2,
+      "onedrive": 3,
+      "google drive": 3,
+      "dropbox": 3,
+      "icloud": 3,
     },
     response: [
-      "Back up important files using the 3-2-1 rule: three copies, two media types, one offline or offsite copy.",
-      "Encrypt sensitive devices and documents, and only share confidential data through approved, access-controlled channels.",
-      "Review who has access to shared folders regularly so old permissions do not become a quiet risk."
+      "Back up important files using the 3-2-1 rule: three copies of your data, on two different types of media, with one copy stored offline or offsite. This protects against hardware failure, theft, ransomware, and natural disasters.",
+      "Encrypt sensitive devices and documents, and only share confidential data through approved, access-controlled channels. Use built-in full-disk encryption (BitLocker on Windows, FileVault on Mac) and encrypted file sharing services.",
+      "Review who has access to shared folders regularly so old permissions do not become a quiet risk. Remove access for people who no longer need it, especially when projects end or colleagues leave."
     ],
     suggestions: ["How do I avoid social engineering?", "What should I do if malware hits?", "Rate my security"]
   },
@@ -148,11 +178,15 @@ const faqTopics = [
       verify: 3,
       pressure: 2,
       request: 1,
+      "social engineering": 5,
+      "pretexting": 4,
+      "vishing": 4,
+      "voice call": 2,
     },
     response: [
-      "Social engineering succeeds by creating pressure and trust, so slow the interaction down and verify the request independently.",
-      "Never share passwords, one-time codes, or sensitive details just because someone sounds legitimate or senior.",
-      "For physical spaces, challenge unfamiliar visitors politely and follow badge or escort policies."
+      "Social engineering succeeds by creating pressure and trust, so slow the interaction down and verify the request independently. Real urgency from legitimate sources can wait a few minutes for verification.",
+      "Never share passwords, one-time codes, or sensitive details just because someone sounds legitimate or senior. Attackers often impersonate IT support, executives, or vendors to extract information.",
+      "For physical spaces, challenge unfamiliar visitors politely and follow badge or escort policies. Someone with a uniform and a badge story may not be who they claim to be."
     ],
     suggestions: ["How do I stay safe on my phone?", "What are general security best practices?", "Give me a checklist"]
   },
@@ -176,11 +210,16 @@ const faqTopics = [
       sim: 3,
       lost: 2,
       wipe: 2,
+      "lost phone": 4,
+      "stolen phone": 4,
+      "phone security": 4,
+      "mobile security": 4,
+      "find my phone": 4,
     },
     response: [
-      "Protect phones with a strong device PIN or biometric unlock, and keep the operating system and apps updated.",
-      "Install apps only from official stores, review permissions carefully, and disable Bluetooth or hotspot features when unused.",
-      "Use remote locate and wipe features so a lost device is less likely to become a data-loss event."
+      "Protect phones with a strong device PIN or biometric unlock (fingerprint or face), and keep the operating system and apps updated. Mobile devices are increasingly targeted by attackers.",
+      "Install apps only from official stores (Google Play, Apple App Store), review permissions carefully, and disable Bluetooth or hotspot features when unused. Grant only the permissions each app actually needs.",
+      "Use remote locate and wipe features so a lost device is less likely to become a data-loss event. Enable 'Find My Device' on Android or 'Find My iPhone' on iOS before you need it."
     ],
     suggestions: ["How do I detect phishing texts?", "What should I do after losing a device?", "Start the security quiz"]
   },
@@ -203,11 +242,17 @@ const faqTopics = [
       urgent: 1,
       recovery: 2,
       wipe: 1,
+      "hacked account": 5,
+      "compromised": 4,
+      "virus": 3,
+      "trojan": 3,
+      "someone clicked": 4,
+      "bad link": 4,
     },
     response: [
-      "If you suspect compromise, isolate the affected device or account first so the issue does not spread further.",
-      "Report the incident quickly, preserve evidence such as screenshots or timestamps, and avoid deleting suspicious emails or files before review.",
-      "Reset impacted passwords from a known-safe device and monitor for follow-on abuse."
+      "If you suspect compromise, isolate the affected device or account first by disconnecting from the network or changing the password immediately. This prevents the issue from spreading further.",
+      "Report the incident quickly to your IT department or relevant authority, preserve evidence such as screenshots or timestamps, and avoid deleting suspicious emails or files before review.",
+      "Reset impacted passwords from a known-safe device and monitor for follow-on abuse. Check for unauthorized transactions, new account registrations, or sent messages you did not write."
     ],
     suggestions: ["How can I protect my data?", "What are the best daily habits?", "Assess my security"]
   },
@@ -226,13 +271,228 @@ const faqTopics = [
       cybersecurity: 2,
       cyber: 2,
       tips: 3,
+      "best practices": 4,
+      "security tips": 4,
+      "how to": 2,
     },
     response: [
-      "The strongest baseline is simple: update devices promptly, use unique passwords with MFA, and pause before trusting unexpected requests.",
-      "Back up important data, lock devices when unattended, and keep work and personal accounts separated where possible.",
-      "Security improves most when good habits are repeated consistently, not only after a scary incident."
+      "The strongest baseline is simple: update devices promptly, use unique passwords with MFA, and pause before trusting unexpected requests. These three habits stop most attacks.",
+      "Back up important data, lock devices when unattended, and keep work and personal accounts separated where possible. Physical security matters as much as digital security.",
+      "Security improves most when good habits are repeated consistently, not only after a scary incident. Make security part of your routine rather than something you think about only when something goes wrong."
     ],
     suggestions: ["How do I build strong passwords?", "How do I recognize phishing?", "Start the security quiz"]
+  },
+  {
+    id: "malware",
+    label: "Malware Protection",
+    keywords: {
+      malware: 5,
+      virus: 4,
+      viruses: 4,
+      ransomware: 5,
+      trojan: 4,
+      worm: 3,
+      infected: 4,
+      "virus scan": 4,
+      "antivirus": 4,
+      "malicious": 3,
+      "infect": 3,
+      "suspicious file": 3,
+      "computer slow": 2,
+      "popups": 2,
+    },
+    response: [
+      "Malware includes viruses, ransomware, trojans, and other malicious software that can damage your system, steal data, or hold your files hostage. Ransomware has become especially prevalent, encrypting your files and demanding payment.",
+      "Keep antivirus software active and updated, and run regular scans. Windows Defender is built into Windows and provides solid protection, but ensure real-time protection is enabled.",
+      "If you suspect malware, disconnect from the internet immediately, run a full antivirus scan, and if the infection is severe, consider restoring from a clean backup. Do not pay ransomware demands—there's no guarantee you'll get your files back."
+    ],
+    suggestions: ["What should I do after malware hits?", "How do I prevent ransomware?", "Start the security quiz"]
+  },
+  {
+    id: "wifi",
+    label: "WiFi Security",
+    keywords: {
+      wifi: 5,
+      wlan: 3,
+      wireless: 3,
+      vpn: 4,
+      network: 2,
+      hotspot: 4,
+      "public wifi": 5,
+      "free wifi": 4,
+      "coffee shop": 2,
+      "airport wifi": 3,
+      "unsecure": 2,
+      "secure network": 3,
+      "home network": 3,
+    },
+    response: [
+      "Public WiFi networks are often unencrypted and can be monitored by anyone nearby. Avoid accessing banking, work accounts, or entering passwords when on public WiFi unless you have a VPN.",
+      "Use a reputable VPN when connecting to public networks—it encrypts your traffic so even if someone is watching, they cannot see your activity. Free VPNs often have questionable privacy practices, so choose a trusted paid service.",
+      "At home, use WPA3 or WPA2 encryption for your WiFi, change the default router password, and keep router firmware updated. A weak or default WiFi password can let attackers into your entire network."
+    ],
+    suggestions: ["What is a VPN?", "How do I secure my home network?", "How do I browse safely?"]
+  },
+  {
+    id: "socialmedia",
+    label: "Social Media Security",
+    keywords: {
+      facebook: 3,
+      fb: 2,
+      instagram: 3,
+      twitter: 3,
+      x: 2,
+      tiktok: 2,
+      social: 4,
+      socialmedia: 5,
+      "social media": 5,
+      post: 2,
+      privacy: 3,
+      "account hacked": 4,
+      "fake account": 3,
+      "social media privacy": 5,
+    },
+    response: [
+      "Review privacy settings on social media accounts regularly—posts that are public can be seen by anyone, including potential employers, scammers, and identity thieves. Limit what strangers can see.",
+      "Be cautious about what you share: avoid posting your address, phone number, vacation plans, or photos that reveal identifying information. Scammers use social media to gather personal details for targeted attacks.",
+      "Watch for fake accounts impersonating friends or brands—if someone you know sends a suspicious link or request out of character, their account may be compromised. Report fake profiles to the platform."
+    ],
+    suggestions: ["How do I protect my privacy?", "What is phishing?", "Check my security habits"]
+  },
+  {
+    id: "updates",
+    label: "Software Updates",
+    keywords: {
+      update: 4,
+      updates: 4,
+      update: 3,
+      patching: 4,
+      patch: 4,
+      outdated: 3,
+      "software update": 4,
+      "system update": 4,
+      "install update": 4,
+      "skip update": 2,
+      "postpone update": 2,
+    },
+    response: [
+      "Software updates often include critical security patches for vulnerabilities that attackers actively exploit. Delaying updates leaves your devices exposed—many ransomware attacks target systems with known, unpatched flaws.",
+      "Enable automatic updates wherever possible so you don't have to remember to install them. For systems that can't update (like older software), consider isolating them from your main network.",
+      "Update browsers, operating systems, and applications promptly. Even seemingly minor updates often address security issues that could be exploited if left unpatched."
+    ],
+    suggestions: ["Why are updates important?", "How do I enable automatic updates?", "What is patching?"]
+  },
+  {
+    id: "twofactor",
+    label: "Two-Factor Authentication",
+    keywords: {
+      "2fa": 5,
+      twofactor: 5,
+      "two factor": 5,
+      mfa: 4,
+      multifactor: 4,
+      authenticator: 4,
+      "google authenticator": 4,
+      "authenticator app": 4,
+      sms: 2,
+      "verification code": 4,
+      "security code": 3,
+      "second factor": 4,
+      "two-step": 4,
+    },
+    response: [
+      "Two-factor authentication (2FA) adds a second verification step beyond your password. Even if an attacker steals your password, they cannot access your account without the second factor.",
+      "Prefer authenticator apps (like Google Authenticator, Authy, or Microsoft Authenticator) over SMS verification—SMS can be intercepted through SIM swapping attacks. Hardware security keys (like YubiKey) provide the strongest protection.",
+      "Enable 2FA on your most critical accounts first: email, banking, and any account that holds sensitive personal information. These are the most valuable targets for attackers."
+    ],
+    suggestions: ["What is the best 2FA method?", "How do I set up 2FA?", "Why use an authenticator app?"]
+  },
+  {
+    id: "remote",
+    label: "Remote Work Security",
+    keywords: {
+      remote: 4,
+      wfh: 4,
+      "work from home": 4,
+      "working from home": 4,
+      "home office": 3,
+      "remote work": 4,
+      vpn: 3,
+      "work laptop": 3,
+      "personal device": 2,
+    },
+    response: [
+      "When working from home, always use your organization's VPN when accessing work resources. This encrypts your connection and protects sensitive company data from being intercepted.",
+      "Keep your work and personal activities separated—use your work laptop only for work tasks, and avoid letting family members use it. Personal devices may not have the same security controls.",
+      "Lock your screen when stepping away, even at home. A quick walk to the kitchen or bathroom is enough time for someone to access your work accounts if left unlocked."
+    ],
+    suggestions: ["How do I secure my home office?", "What is a work VPN?", "Security checklist for remote work"]
+  },
+  {
+    id: "cloud",
+    label: "Cloud Storage Security",
+    keywords: {
+      onedrive: 4,
+      "one drive": 4,
+      "google drive": 4,
+      dropbox: 4,
+      icloud: 4,
+      cloud: 4,
+      "cloud storage": 5,
+      "file sharing": 3,
+      "shared folder": 3,
+      "sync": 2,
+    },
+    response: [
+      "Cloud storage services like OneDrive, Google Drive, and Dropbox are convenient but introduce security considerations. Enable two-factor authentication on your cloud accounts and review active sessions regularly.",
+      "Be careful when sharing files—use expiry dates for shared links and avoid making files publicly accessible unless necessary. Check who has access to shared folders and remove unnecessary collaborators.",
+      "Understand that cloud storage can be accessed if your password is compromised. Use a strong, unique password and enable alerts for new device logins to catch unauthorized access quickly."
+    ],
+    suggestions: ["How do I secure my cloud storage?", "Is my cloud safe?", "Best practices for file sharing"]
+  },
+  {
+    id: "browser",
+    label: "Browser Security",
+    keywords: {
+      extension: 4,
+      extensions: 4,
+      cookie: 3,
+      cookies: 3,
+      "private browsing": 4,
+      incognito: 3,
+      "browsing history": 2,
+      "clear cache": 3,
+      "ad blocker": 4,
+      "malicious extension": 4,
+    },
+    response: [
+      "Browser extensions can read and modify web page content, so only install extensions from trusted developers. Review the permissions requested and remove extensions you no longer use.",
+      "Use private or incognito mode for sensitive browsing that you don't want saved in history, but remember it doesn't make you anonymous—your activity can still be seen by your ISP and the websites you visit.",
+      "Regularly clear your browser cache and cookies to reduce tracking. Consider using an ad blocker to reduce exposure to malicious ads, which are a common vector for malware."
+    ],
+    suggestions: ["How do I secure my browser?", "Are browser extensions safe?", "How to browse privately"]
+  },
+  {
+    id: "iot",
+    label: "Smart Device Security",
+    keywords: {
+      iot: 4,
+      "smart home": 4,
+      "smart device": 4,
+      thermostat: 2,
+      camera: 3,
+      "security camera": 4,
+      "smart tv": 3,
+      "internet of things": 4,
+      "connected device": 3,
+      "device security": 3,
+    },
+    response: [
+      "Smart devices (cameras, thermostats, TVs) often have weak security by default. Change default passwords immediately, enable automatic updates, and research the manufacturer's security reputation before buying.",
+      "Place IoT devices on a separate network from your main computers—this limits damage if a device is compromised. Many routers support guest or IoT network features.",
+      "Disable features you don't use, like remote access or voice assistants, to reduce the attack surface. Review privacy settings on smart devices and limit what data they collect."
+    ],
+    suggestions: ["How do I secure my smart home?", "Are smart cameras safe?", "IoT security tips"]
   }
 ];
 
@@ -284,6 +544,38 @@ const quizQuestions = [
       { label: "I would probably change a password and hope it is enough", score: 1 },
       { label: "I am not sure what I would do", score: 0 }
     ]
+  },
+  {
+    question: "When using public WiFi, what do you typically do?",
+    options: [
+      { label: "I use a VPN for any sensitive activity", score: 2 },
+      { label: "I am careful but don't always use a VPN", score: 1 },
+      { label: "I use it normally without extra precautions", score: 0 }
+    ]
+  },
+  {
+    question: "How do you handle social media privacy settings?",
+    options: [
+      { label: "I regularly review and adjust my privacy settings", score: 2 },
+      { label: "I set them once and rarely check again", score: 1 },
+      { label: "I keep default settings", score: 0 }
+    ]
+  },
+  {
+    question: "What do you do before downloading files from the internet?",
+    options: [
+      { label: "I verify the source and scan if possible", score: 2 },
+      { label: "I check if it looks legitimate", score: 1 },
+      { label: "I download if I need it", score: 0 }
+    ]
+  },
+  {
+    question: "How do you handle software and browser extensions?",
+    options: [
+      { label: "I limit extensions and keep them updated", score: 2 },
+      { label: "I have several but rarely check them", score: 1 },
+      { label: "I install whatever seems useful", score: 0 }
+    ]
   }
 ];
 
@@ -296,10 +588,15 @@ const quizState = {
 const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security"];
 const fallbackSuggestions = ["Strong password tips", "How to report phishing", "Start the security quiz"];
 const quizRestartTriggers = ["restart quiz", "retake quiz", "start quiz again", "start again"];
-const greetingTriggers = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"];
-const helpTriggers = ["help", "assist", "support", "what can you do", "what do you do"];
-const thanksTriggers = ["thanks", "thank you", "appreciate it"];
-const identityTriggers = ["who are you", "what are you", "are you a bot", "are you chatbot", "what is cybershield"];
+const greetingTriggers = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "greetings", "good day"];
+const helpTriggers = ["help", "assist", "support", "what can you do", "what do you do", "what can you help with"];
+const thanksTriggers = ["thanks", "thank you", "appreciate it", "thx", "ty"];
+const identityTriggers = ["who are you", "what are you", "are you a bot", "are you chatbot", "what is cybershield", "introduce yourself"];
+const forgotPasswordTriggers = ["forgot password", "forgot my password", "forgotten password", "can't access my account", "lost my password", "password reset help"];
+const hackedTriggers = ["hacked", "account hacked", "my account was hacked", "someone hacked", "got hacked", "compromised account", "someone got into my account"];
+const clickedBadLinkTriggers = ["clicked bad link", "clicked suspicious link", "clicked wrong link", "clicked on phishing", "opened bad link", "opened suspicious link"];
+const isEmailSafeTriggers = ["is this safe", "is this legitimate", "is this real", "is this email safe", "check this email", "verify this email", "is this a scam"];
+const tipTriggers = ["tip", "did you know", "fun fact", "security tip", "give me a tip"];
 const normalizationRules = [
   [/\bwi[\s-]?fi\b/g, "wifi"],
   [/\bpass[\s-]?word\b/g, "password"],
@@ -316,6 +613,14 @@ const normalizationRules = [
   [/\btext message\b|\btext messages\b/g, "sms"],
   [/\bdata breach\b/g, "breach"],
   [/\bremote wipe\b/g, "wipe"],
+  [/\banti[\s-]?virus\b/g, "antivirus"],
+  [/\bvpn\b/g, "vpn"],
+  [/\bmfa\b/g, "mfa"],
+  [/\bsecurity code\b|\bverification code\b/g, "verification code"],
+  [/\bhome network\b/g, "home network"],
+  [/\bpublic network\b/g, "public wifi"],
+  [/\bfree wifi\b/g, "public wifi"],
+  [/\bwireless\b/g, "wifi"],
 ];
 
 function sanitizeForMatching(text) {
@@ -799,12 +1104,13 @@ function findBestTopic(normalizedInput) {
 }
 
 function buildGreetingResponse() {
+  const greetings = [
+    "Hi, I'm CyberShield, your cybersecurity FAQ assistant.",
+    "I can give quick, practical answers on phishing, passwords, safe browsing, mobile security, incidents, and practical everyday protection.",
+    "Ask me something specific like \"How do I spot phishing emails?\" or use one of the suggested prompts below."
+  ];
   return {
-    response: [
-      "Hi, I'm CyberShield, your cybersecurity FAQ assistant.",
-      "I can give quick, practical answers on phishing, passwords, safe browsing, mobile security, incident response, and a short security checkup.",
-      "Ask me something specific like \"How do I spot phishing emails?\" or use one of the suggested prompts below."
-    ],
+    response: greetings,
     suggestions: ["How do I spot phishing emails?", "Strong password tips", "Start the security quiz"],
     confidence: "greeting pattern match"
   };
@@ -814,7 +1120,7 @@ function buildHelpResponse() {
   return {
     response: [
       "I'm built to answer common cybersecurity FAQs with short, practical guidance.",
-      "You can ask about password safety, phishing, suspicious links, phone security, data protection, or what to do after a possible breach.",
+      "You can ask about password safety, phishing, suspicious links, phone security, data protection, software updates, social media privacy, WiFi security, remote work safety, and what to do after a possible breach.",
       "If you want a broader check, I can also run a quick security quiz and give recommendations."
     ],
     suggestions: ["Password security tips", "How do I report phishing?", "Start the security quiz"],
@@ -836,12 +1142,97 @@ function buildThanksResponse() {
 function buildIdentityResponse() {
   return {
     response: [
-      "I'm CyberShield, a rule-based cybersecurity FAQ chatbot for this project.",
-      "I answer common questions about phishing, passwords, mobile safety, safe browsing, incident response, and basic security habits.",
-      "I'm not a live human analyst, but I can give quick, practical guidance and run the built-in security checkup."
+      "I'm CyberShield, a rule-based cybersecurity FAQ chatbot for this school project.",
+      "I answer common questions about phishing, passwords, mobile safety, safe browsing, incident response, malware, WiFi security, social media privacy, software updates, 2FA, remote work security, and basic security habits.",
+      "I'm not a live human analyst, but I can give quick, practical guidance and run the built-in security checkup quiz."
     ],
     suggestions: ["How do I spot phishing emails?", "What can you help me with?", "Start the security quiz"],
     confidence: "identity keyword match"
+  };
+}
+
+function buildForgotPasswordResponse() {
+  return {
+    response: [
+      "If you've forgotten your password, most services have a 'Forgot Password' link on their login page to reset it. Use this rather than trying to guess or reuse old passwords.",
+      "Before resetting, check that the email requesting your password change is legitimate—attackers often send fake password reset emails to steal credentials.",
+      "Once you regain access, enable two-factor authentication to prevent future lockouts. Consider using a password manager to remember passwords securely."
+    ],
+    suggestions: ["How do I create strong passwords?", "What is 2FA?", "How do I spot phishing emails?"],
+    confidence: "forgot password keyword match"
+  };
+}
+
+function buildHackedResponse() {
+  return {
+    response: [
+      "If you think your account was hacked, act quickly: change your password immediately from a different device, then enable two-factor authentication if not already active.",
+      "Check your account for any unauthorized changes—review recent login activity, security settings, forwarded emails, or sent messages that weren't from you.",
+      "Report the compromise to the service provider (many have dedicated security pages), and if financial information was exposed, contact your bank. Run a full virus scan on your devices."
+    ],
+    suggestions: ["What should I do after a breach?", "How do I secure my accounts?", "Start the security quiz"],
+    confidence: "hacked keyword match"
+  };
+}
+
+function buildClickedBadLinkResponse() {
+  return {
+    response: [
+      "If you clicked a suspicious link, stop interacting with the page immediately. Do not enter any information, download files, or click further links.",
+      "Disconnect from the internet if possible to prevent potential data exfiltration. Run a full antivirus scan on your device to check for malware.",
+      "If you entered credentials on the fake site, change those passwords immediately from a clean device. Monitor your accounts for unusual activity in the following weeks."
+    ],
+    suggestions: ["What should I do after malware hits?", "How do I spot phishing emails?", "What is malware?"],
+    confidence: "clicked bad link keyword match"
+  };
+}
+
+function buildIsEmailSafeResponse() {
+  return {
+    response: [
+      "To check if an email is safe, look for: mismatched sender addresses (the visible name doesn't match the actual email), urgency or threats, requests for personal information, and suspicious links or attachments.",
+      "Hover over links to see the actual URL before clicking—if it looks strange or uses a different domain than the supposed sender, don't click.",
+      "When in doubt, contact the sender through a different channel (call them or use their official website) to verify the email is legitimate."
+    ],
+    suggestions: ["How do I spot phishing emails?", "How do I report phishing?", "What is phishing?"],
+    confidence: "is email safe keyword match"
+  };
+}
+
+function buildEncouragementResponse() {
+  return {
+    response: [
+      "Great question! Asking about security shows you care about protecting yourself online.",
+      "Small consistent actions—like updating software, using unique passwords, and thinking before clicking—make a big difference over time.",
+      "Keep learning and stay curious about security. You're building habits that will serve you well."
+    ],
+    suggestions: ["How do I spot phishing emails?", "Give me a security checklist", "Start the security quiz"],
+    confidence: "encouragement pattern"
+  };
+}
+
+const securityTips = [
+  "Using a password manager reduces the risk of password reuse and makes it easy to use unique, strong passwords for every account.",
+  "Most data breaches start with a phishing email—learning to spot red flags is one of the most valuable security skills.",
+  "Enable automatic software updates so you don't have to remember to patch critical vulnerabilities.",
+  "Using a VPN on public WiFi encrypts your traffic and protects sensitive data from potential eavesdroppers.",
+  "Two-factor authentication (2FA) can stop most account takeovers even if your password gets compromised.",
+  "Regularly backing up your files using the 3-2-1 rule protects you from both hardware failure and ransomware.",
+  "Reviewing app permissions regularly helps limit what data apps can access on your devices.",
+  "Using unique passwords for each account prevents a single breach from compromising multiple services.",
+  "Checking the URL before entering credentials helps avoid fake login pages used in phishing attacks.",
+  "Locking your computer when you step away prevents casual access to your files and accounts."
+];
+
+function buildTipResponse() {
+  const randomTip = securityTips[Math.floor(Math.random() * securityTips.length)];
+  return {
+    response: [
+      "Here's a security tip:",
+      randomTip
+    ],
+    suggestions: ["Give me another tip", "How do I spot phishing?", "Start the security quiz"],
+    confidence: "tip keyword match"
   };
 }
 
@@ -865,6 +1256,26 @@ function getBotReply(userText) {
 
   if (identityTriggers.some((trigger) => normalizedInput.includes(trigger))) {
     return { type: "faq", ...buildIdentityResponse() };
+  }
+
+  if (forgotPasswordTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildForgotPasswordResponse() };
+  }
+
+  if (hackedTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildHackedResponse() };
+  }
+
+  if (clickedBadLinkTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildClickedBadLinkResponse() };
+  }
+
+  if (isEmailSafeTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildIsEmailSafeResponse() };
+  }
+
+  if (tipTriggers.some((trigger) => normalizedInput.includes(trigger))) {
+    return { type: "faq", ...buildTipResponse() };
   }
 
   if (hasGreeting && helpTriggers.some((trigger) => normalizedInput.includes(trigger))) {

@@ -8,26 +8,48 @@ The goal of this project is to turn static cybersecurity FAQ content into an int
 
 ## Main Features
 
-- rule-based cybersecurity FAQ chatbot
-- premium dark UI with responsive sidebar layout
-- multiple in-browser chat sessions
-- chat history switching and deletion
-- quick reply suggestions after bot responses
-- typing indicator for conversational feedback
-- startup skeleton loading screen
-- interactive security checkup quiz with score and recommendations
-- greeting, help, identity, and fallback handling
+- Rule-based cybersecurity FAQ chatbot with weighted keyword matching
+- Premium dark UI with responsive sidebar layout
+- Multiple in-browser chat sessions with history management
+- Chat history switching and deletion
+- Quick reply suggestions after bot responses
+- Typing indicator for conversational feedback
+- Startup skeleton loading screen
+- Interactive security checkup quiz with scoring and personalized recommendations
+- Text normalization for handling typos and variations
+- Edge case handling for common scenarios
+- Security tips feature ("Did you know?")
 
 ## FAQ Topics Covered
 
-- password security
-- phishing awareness
-- safe browsing
-- data protection
-- social engineering
-- mobile security
-- incident response
-- general best practices
+### Core Topics
+- Password Security
+- Phishing Awareness
+- Safe Browsing
+- Data Protection
+- Social Engineering
+- Mobile Security
+- Incident Response
+- General Best Practices
+
+### Extended Topics
+- Malware Protection
+- WiFi Security
+- Social Media Security
+- Software Updates
+- Two-Factor Authentication
+- Remote Work Security
+- Cloud Storage Security
+- Browser Security
+- Smart Device Security
+
+## Edge Cases Handled
+
+- Forgotten password assistance
+- Hacked account response
+- Clicked bad link guidance
+- "Is this email safe?" verification
+- Security tips ("Give me a tip")
 
 ## How It Works
 
@@ -35,46 +57,56 @@ The chatbot does not use a live AI model or backend service. It works entirely i
 
 When a user submits a message:
 
-1. the input is normalized
-2. keywords and phrases are matched against FAQ categories
-3. the most relevant topic is selected
-4. a prepared response and follow-up suggestions are returned
+1. The input is normalized (handles typos, variations, and common misspellings)
+2. Keywords and phrases are matched against FAQ categories with weighted scoring
+3. The most relevant topic is selected based on the highest score
+4. A prepared response and follow-up suggestions are returned
 
 If the input is unclear, the bot gives a guided fallback response instead of failing silently.
 
 ## Security Checkup Quiz
 
-The app includes a short rule-based quiz that asks multiple-choice cybersecurity habit questions. At the end, it calculates a score and shows a recommendation card based on the user’s result.
+The app includes a 10-question rule-based quiz that assesses cybersecurity habits:
+
+- Unique password usage
+- Multi-factor authentication
+- Link and attachment handling
+- Software updates
+- Data backup practices
+- Incident response
+- Public WiFi usage
+- Social media privacy
+- File downloading habits
+- Browser extension management
+
+At the end, it calculates a score and shows a recommendation card based on the user's result with practical next steps.
+
+## Technical Implementation
+
+- **Keyword Matching**: Weighted scoring system that considers keyword frequency and importance
+- **Text Normalization**: Handles 20+ common typos and phrase variations
+- **Session Management**: Multiple chat sessions stored in browser memory
+- **Quiz Scoring**: 0-2 scale per question, categorized into low/medium/high security posture
 
 ## Files
 
 - `index.html` - app structure
 - `styles.css` - visual design and layout
-- `script.js` - chatbot logic, quiz logic, and session handling
+- `script.js` - chatbot logic, quiz logic, FAQ topics, and session handling
 - `SPEC.md` - final project specification
+- `README.md` - project documentation
 
 ## GitHub Pages Deployment
 
-This project is ready to be deployed as a static site with GitHub Pages.
-
-Basic steps:
-
-1. create a new GitHub repository
-2. upload `index.html`, `styles.css`, `script.js`, `README.md`, and `SPEC.md`
-3. go to the repository `Settings`
-4. open the `Pages` section
-5. set the source to the main branch root
-6. save and wait for GitHub to generate the live URL
-
-After deployment, the app can be opened directly from the generated GitHub Pages link and shared by email with the lecturer.
+This project is deployed and accessible at: **https://chmgx81.github.io/cybershield-faq-bot/**
 
 ## Limitations
 
-- no backend or database
-- no persistent storage across browser reloads
-- no real AI or NLP model
-- responses are limited to predefined FAQ content and interaction rules
+- No backend or database
+- No persistent storage across browser reloads
+- No real AI or NLP model
+- Responses are limited to predefined FAQ content and interaction rules
 
 ## Summary
 
-CyberShield FAQ Bot demonstrates how a simple rule-based system can be presented in a polished, modern interface to create a strong chatbot experience for a school project. It combines practical cybersecurity guidance with a premium UI and lightweight front-end implementation.
+CyberShield FAQ Bot demonstrates how a simple rule-based system can be presented in a polished, modern interface to create a strong chatbot experience for a school project. It combines practical cybersecurity guidance with a premium UI, comprehensive topic coverage, and lightweight front-end implementation. The project showcases understanding of NLP concepts, pattern matching, and interactive UI design.
