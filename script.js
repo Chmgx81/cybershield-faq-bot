@@ -585,7 +585,7 @@ const quizState = {
   answers: []
 };
 
-const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security"];
+const quizTriggers = ["quiz", "checklist", "assess", "score", "rate my security", "security quiz", "take a quiz", "start quiz", "security checkup", "checkup"];
 const fallbackSuggestions = ["Strong password tips", "How to report phishing", "Start the security quiz"];
 const quizRestartTriggers = ["restart quiz", "retake quiz", "start quiz again", "start again"];
 const greetingTriggers = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "greetings", "good day"];
