@@ -1104,27 +1104,25 @@ button {
 
 .chat-composer {
   display: none;
-  width: min(100%, 820px);
-  margin: 0 auto;
-  padding: 10px 12px;
-  align-items: center;
-  gap: 10px;
-  background: var(--panel);
+  width: min(100%, 640px);
+  margin-top: 0;
+  padding: 14px 14px 10px;
   border-radius: 16px;
+  background: var(--panel);
   box-shadow: var(--shadow);
 }
 
 .workspace.chat-started .chat-composer {
-  display: flex;
+  display: block;
 }
 
 .chat-composer input {
-  flex: 1;
+  width: 100%;
   border: 0;
   background: transparent;
   color: var(--text);
   font-size: 13px;
-  padding: 4px 0;
+  padding: 0 0 12px;
 }
 
 .chat-composer input::placeholder {
@@ -1136,7 +1134,7 @@ button {
 }
 
 .workspace.chat-started .chat-messages {
-  width: min(100%, 820px);
+  width: min(100%, 760px);
   padding-top: 14px;
 }
 
