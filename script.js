@@ -27,6 +27,7 @@ let isAtBottom = true;
 let hasStartedConversation = false;
 let currentChatTitle = "";
 let lastUserPrompt = "";
+let lastMatchedTopic = null;
 let activeSessionId = null;
 let nextSessionId = 1;
 let pendingBotTimeouts = [];
@@ -1223,7 +1224,7 @@ function addUtilityActions(container, role, contentText) {
       addBotMessageWithDelay(() => {
         const reply = getBotReply(lastUserPrompt);
         if (reply.type === "quiz-start") {
-          startQuizFlow();
+          startQuizFlow(false);
           return;
         }
 
@@ -1540,6 +1541,26 @@ function buildFallbackResponse() {
   };
 }
 
+const topicToCategoryMap = {
+  password: "password",
+  phishing: "phishing",
+  mobile: "mobile",
+  socialmedia: "socialmedia",
+  wifi: "wifi",
+  social: "phishing",
+  browsing: "general",
+  data: "general",
+  incident: "general",
+  general: "general",
+  malware: "general",
+  updates: "general",
+  twofactor: "password",
+  remote: "wifi",
+  cloud: "general",
+  browser: "general",
+  iot: "wifi"
+};
+
 function getBotReply(userText) {
   const normalizedInput = sanitizeForMatching(userText);
   const tokens = buildTokenSet(normalizedInput);
@@ -1551,7 +1572,7 @@ function getBotReply(userText) {
     quizTriggers.some((trigger) => normalizedInput.includes(trigger)) ||
     (tokens.has("checkup") && (tokens.has("security") || tokens.has("cybersecurity")))
   ) {
-    return { type: "quiz-start" };
+    return { type: "quiz-start", topic: null };
   }
 
   if (identityTriggers.some((trigger) => normalizedInput.includes(trigger))) {
@@ -1596,19 +1617,23 @@ function getBotReply(userText) {
 
   if (asksHow && tokens.has("password")) {
     const topic = getTopicById("password");
+    lastMatchedTopic = "password";
     return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: password" };
   }
 
   if ((tokens.has("phishing") || tokens.has("scam")) && (tokens.has("email") || tokens.has("emails") || tokens.has("message") || tokens.has("messages") || tokens.has("sms"))) {
     const topic = getTopicById("phishing");
+    lastMatchedTopic = "phishing";
     return { type: "faq", response: topic.response, suggestions: topic.suggestions, confidence: "keyword match: phishing + email" };
   }
 
   const matchedTopic = findBestTopic(normalizedInput);
   if (!matchedTopic) {
+    lastMatchedTopic = null;
     return { type: "faq", ...buildFallbackResponse() };
   }
 
+  lastMatchedTopic = matchedTopic.id;
   return {
     type: "faq",
     response: matchedTopic.response,
@@ -1812,7 +1837,7 @@ function buildQuizCategoryCard() {
   return wrapper;
 }
 
-function startQuizFlow() {
+function startQuizFlow(fromMenu = false) {
   resetQuizState();
   
   // Clear any existing quiz/score cards before starting fresh
@@ -1822,13 +1847,40 @@ function startQuizFlow() {
       msg.remove();
     }
   });
+
+  // If triggered from menu, show category selection
+  // If triggered after a topic question, use that topic
+  if (fromMenu) {
+    addBotMessageWithDelay(() => {
+      addMessage("bot", [
+        "Let's run a security checkup!",
+        "Choose a category below to test your knowledge."
+      ]);
+      addMessage("bot", buildQuizCategoryCard());
+    });
+    return;
+  }
+
+  // Use last matched topic if available
+  const suggestedCategoryId = topicToCategoryMap[lastMatchedTopic];
+  let suggestedCategoryIndex = 0;
+  
+  if (suggestedCategoryId) {
+    suggestedCategoryIndex = quizCategories.findIndex(c => c.id === suggestedCategoryId);
+    if (suggestedCategoryIndex === -1) suggestedCategoryIndex = 0;
+  }
+
+  const suggestedCategory = quizCategories[suggestedCategoryIndex];
   
   addBotMessageWithDelay(() => {
     addMessage("bot", [
-      "Let's run a security checkup!",
-      "Choose a category below to test your knowledge."
+      `Great! Let's test your ${suggestedCategory.name} knowledge.`,
+      "Answer each question based on your actual habits."
     ]);
-    addMessage("bot", buildQuizCategoryCard());
+    quizState.selectedCategory = suggestedCategoryIndex;
+    quizState.currentIndex = 0;
+    quizState.answers = [];
+    addMessage("bot", buildQuizQuestionCard());
   });
 }
 
@@ -1995,7 +2047,12 @@ function handleUserMessage(rawInput) {
   userInput.value = "";
 
   if (quizState.active && quizRestartTriggers.some((trigger) => normalizedInput.includes(trigger))) {
-    startQuizFlow();
+    // If we have a selected category, restart that; otherwise go to menu
+    if (quizState.selectedCategory !== null && quizState.selectedCategory !== undefined) {
+      startQuizFlow(false);
+    } else {
+      startQuizFlow(true);
+    }
     return;
   }
 
@@ -2013,7 +2070,7 @@ function handleUserMessage(rawInput) {
 
   const reply = getBotReply(trimmedInput);
   if (reply.type === "quiz-start") {
-    startQuizFlow();
+    startQuizFlow(false);
     return;
   }
 
@@ -2039,6 +2096,17 @@ userInput.addEventListener("keydown", (event) => {
 
 promptButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    // Handle quiz menu trigger separately
+    if (button.dataset.quizMenu === "true") {
+      startNewConversation();
+      setTimeout(() => {
+        startQuizFlow(true);
+      }, 100);
+      appShell.classList.remove("sidebar-open");
+      syncNavigationState();
+      return;
+    }
+    
     if (button.closest(".sidebar-nav")) {
       startNewConversation();
     }
