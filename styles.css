@@ -1317,7 +1317,7 @@ button {
  }
 
 .modal {
-  background: var(--bg-surface);
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 0;

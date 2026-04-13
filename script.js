@@ -794,6 +794,7 @@ function restoreSessionNodes(session) {
   chatMessages.replaceChildren(...session.nodes);
   refreshIcons();
   scrollChatToBottom();
+  renderHistory();
 }
 
 function createSession(title) {
@@ -1596,7 +1597,18 @@ function startNewConversation() {
   cancelPendingBotResponses();
   syncActiveSessionState();
   storeCurrentSessionNodes();
-  resetToBlankComposer();
+  
+  createSession("New conversation");
+  renderHistory();
+  
+  chatMessages.replaceChildren();
+  userInput.value = "";
+  lastUserPrompt = "";
+  quizState.active = false;
+  quizState.currentIndex = 0;
+  quizState.answers = [];
+  setConversationMode(false);
+  userInput.focus();
 }
 
 function showConfirmModal(options) {
