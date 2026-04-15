@@ -12,6 +12,13 @@ const sidebarOverlay = document.querySelector("#sidebarOverlay");
 const appSkeleton = document.querySelector("#appSkeleton");
 const chatHistory = document.querySelector("#chatHistory");
 const clearHistoryButton = document.querySelector("#clearHistoryButton");
+const confirmModal = document.querySelector("#confirmModal");
+const confirmModalBackdrop = document.querySelector("#confirmModalBackdrop");
+const confirmModalTitle = document.querySelector("#confirmModalTitle");
+const confirmModalMessage = document.querySelector("#confirmModalMessage");
+const confirmModalCancel = document.querySelector("#confirmModalCancel");
+const confirmModalConfirm = document.querySelector("#confirmModalConfirm");
+const STORAGE_KEY = "cybershield-faq-bot-state";
 
 let hasStartedConversation = false;
 let currentChatTitle = "";
@@ -19,6 +26,8 @@ let lastUserPrompt = "";
 let activeSessionId = null;
 let nextSessionId = 1;
 let pendingBotTimeouts = [];
+let pendingConfirmAction = null;
+let isRestoringSession = false;
 const chatSessions = [];
 
 const faqTopics = [
@@ -387,6 +396,108 @@ function syncNavigationState() {
   refreshIcons();
 }
 
+function closeConfirmModal() {
+  pendingConfirmAction = null;
+
+  if (confirmModal) {
+    confirmModal.hidden = true;
+  }
+}
+
+function openConfirmModal({ title, message, confirmLabel, onConfirm }) {
+  if (!confirmModal || !confirmModalTitle || !confirmModalMessage || !confirmModalConfirm) {
+    onConfirm();
+    return;
+  }
+
+  confirmModalTitle.textContent = title;
+  confirmModalMessage.textContent = message;
+  confirmModalConfirm.textContent = confirmLabel;
+  pendingConfirmAction = onConfirm;
+  confirmModal.hidden = false;
+  refreshIcons();
+  confirmModalConfirm.focus();
+}
+
+function canUseStorage() {
+  try {
+    return typeof window.localStorage !== "undefined";
+  } catch {
+    return false;
+  }
+}
+
+function getQuickReplyTexts(container) {
+  return Array.from(container.querySelectorAll(".quick-reply"))
+    .map((button) => button.textContent?.trim() || "")
+    .filter(Boolean);
+}
+
+function serializeMessageElement(messageElement) {
+  const bubble = messageElement.querySelector(".message-bubble");
+  if (!bubble) {
+    return null;
+  }
+
+  const role = messageElement.classList.contains("user") ? "user" : "bot";
+
+  if (bubble.querySelector(".quiz-card")) {
+    return {
+      role,
+      type: "quiz-question",
+      questionIndex: quizState.currentIndex
+    };
+  }
+
+  if (bubble.querySelector(".score-card")) {
+    return {
+      role,
+      type: "quiz-result",
+      suggestions: getQuickReplyTexts(bubble)
+    };
+  }
+
+  const parts = Array.from(bubble.children)
+    .filter((child) => child.tagName === "P")
+    .map((child) => child.textContent?.trim() || "")
+    .filter(Boolean);
+
+  return {
+    role,
+    type: "text",
+    parts,
+    suggestions: getQuickReplyTexts(bubble)
+  };
+}
+
+function serializeMessages(container) {
+  return Array.from(container.children)
+    .map((messageElement) => serializeMessageElement(messageElement))
+    .filter(Boolean);
+}
+
+function persistSessions() {
+  if (!canUseStorage() || isRestoringSession) {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      activeSessionId,
+      nextSessionId,
+      sessions: chatSessions.map((session) => ({
+        id: session.id,
+        title: session.title,
+        lastUserPrompt: session.lastUserPrompt,
+        quizState: session.quizState,
+        messages: session.messages || []
+      }))
+    }));
+  } catch {
+    // Ignore storage failures for this front-end-only project.
+  }
+}
+
 function setConversationMode(started) {
   hasStartedConversation = started;
   workspace.classList.toggle("chat-started", started);
@@ -428,6 +539,8 @@ function syncActiveSessionState() {
     currentIndex: quizState.currentIndex,
     answers: [...quizState.answers]
   };
+  activeSession.messages = serializeMessages(chatMessages);
+  persistSessions();
 }
 
 function storeCurrentSessionNodes() {
@@ -437,13 +550,51 @@ function storeCurrentSessionNodes() {
   }
 
   activeSession.nodes = Array.from(chatMessages.children);
+  activeSession.messages = serializeMessages(chatMessages);
   chatMessages.replaceChildren();
 }
 
 function restoreSessionNodes(session) {
-  chatMessages.replaceChildren(...session.nodes);
-  refreshIcons();
-  scrollChatToBottom();
+  if (session.nodes?.length) {
+    chatMessages.replaceChildren(...session.nodes);
+    refreshIcons();
+    scrollChatToBottom();
+    return;
+  }
+
+  const previousQuizState = {
+    active: quizState.active,
+    currentIndex: quizState.currentIndex,
+    answers: [...quizState.answers]
+  };
+
+  isRestoringSession = true;
+  chatMessages.replaceChildren();
+
+  (session.messages || []).forEach((message) => {
+    if (message.type === "quiz-question") {
+      quizState.currentIndex = typeof message.questionIndex === "number" ? message.questionIndex : 0;
+      addMessage(message.role, buildQuizQuestionCard());
+      return;
+    }
+
+    if (message.type === "quiz-result") {
+      quizState.answers = [...(session.quizState?.answers || [])];
+      addMessage(message.role, buildQuizResultsCard(), {
+        suggestions: message.suggestions
+      });
+      return;
+    }
+
+    addMessage(message.role, message.parts || [], {
+      suggestions: message.suggestions
+    });
+  });
+
+  quizState.active = previousQuizState.active;
+  quizState.currentIndex = previousQuizState.currentIndex;
+  quizState.answers = previousQuizState.answers;
+  isRestoringSession = false;
 }
 
 function createSession(title) {
@@ -451,6 +602,7 @@ function createSession(title) {
     id: nextSessionId,
     title,
     lastUserPrompt: "",
+    messages: [],
     nodes: [],
     quizState: {
       active: false,
@@ -463,6 +615,7 @@ function createSession(title) {
   chatSessions.unshift(session);
   activeSessionId = session.id;
   currentChatTitle = session.title;
+  persistSessions();
   return session;
 }
 
@@ -489,6 +642,7 @@ function openSession(sessionId) {
   setConversationMode(session.nodes.length > 0);
   restoreSessionNodes(session);
   renderHistory();
+  persistSessions();
   userInput.focus();
 }
 
@@ -503,6 +657,7 @@ function resetToBlankComposer() {
   activeSessionId = null;
   setConversationMode(false);
   renderHistory();
+  persistSessions();
   userInput.focus();
 }
 
@@ -537,7 +692,14 @@ function renderHistory() {
     menuButton.innerHTML = '<i data-feather="trash-2"></i>';
     menuButton.addEventListener("click", (event) => {
       event.stopPropagation();
-      deleteSession(session.id);
+      openConfirmModal({
+        title: "Delete this chat?",
+        message: "This chat will be removed from your session history and cannot be recovered.",
+        confirmLabel: "Delete chat",
+        onConfirm: () => {
+          deleteSession(session.id);
+        }
+      });
     });
 
     row.append(button, menuButton);
@@ -701,9 +863,9 @@ function renderParagraphs(container, parts) {
   });
 }
 
-function addMessage(role, content, options = {}) {
-  const messageElement = createMessageElement(role);
+function populateMessageElement(messageElement, role, content, options = {}) {
   const bubble = messageElement.querySelector(".message-bubble");
+  bubble.innerHTML = "";
   bubble.prepend(createMessageMeta(role));
   let contentText = "";
 
@@ -735,8 +897,25 @@ function addMessage(role, content, options = {}) {
 
     bubble.appendChild(footer);
   }
+}
+
+function addMessage(role, content, options = {}) {
+  const messageElement = createMessageElement(role);
+  populateMessageElement(messageElement, role, content, options);
 
   chatMessages.appendChild(messageElement);
+  syncActiveSessionState();
+  refreshIcons();
+  scrollChatToBottom();
+  return messageElement;
+}
+
+function replaceMessageContent(messageElement, role, content, options = {}) {
+  if (!messageElement) {
+    return null;
+  }
+
+  populateMessageElement(messageElement, role, content, options);
   syncActiveSessionState();
   refreshIcons();
   scrollChatToBottom();
@@ -927,18 +1106,16 @@ function buildQuizQuestionCard() {
     button.className = "quiz-option";
     button.textContent = option.label;
     button.addEventListener("click", () => {
+      const currentMessage = button.closest(".message");
       quizState.answers.push(option.score);
       quizState.currentIndex += 1;
+
       if (quizState.currentIndex < quizQuestions.length) {
-        addBotMessageWithDelay(() => {
-          addMessage("bot", buildQuizQuestionCard());
-        });
+        replaceMessageContent(currentMessage, "bot", buildQuizQuestionCard());
       } else {
         quizState.active = false;
-        addBotMessageWithDelay(() => {
-          addMessage("bot", buildQuizResultsCard(), {
-            suggestions: ["Restart quiz", "Password security tips", "How do I report phishing?"]
-          });
+        replaceMessageContent(currentMessage, "bot", buildQuizResultsCard(), {
+          suggestions: ["Restart quiz", "Password security tips", "How do I report phishing?"]
         });
       }
     });
@@ -1074,6 +1251,7 @@ function deleteSession(sessionId) {
 
   if (!isActiveSession) {
     renderHistory();
+    persistSessions();
     return;
   }
 
@@ -1085,12 +1263,73 @@ function deleteSession(sessionId) {
 
   activeSessionId = null;
   openSession(nextSession.id);
+  persistSessions();
 }
 
 function clearAllSessions() {
   cancelPendingBotResponses();
   chatSessions.splice(0, chatSessions.length);
   resetToBlankComposer();
+  persistSessions();
+}
+
+function loadPersistedSessions() {
+  if (!canUseStorage()) {
+    return false;
+  }
+
+  try {
+    const rawState = window.localStorage.getItem(STORAGE_KEY);
+    if (!rawState) {
+      return false;
+    }
+
+    const parsedState = JSON.parse(rawState);
+    if (!parsedState || !Array.isArray(parsedState.sessions)) {
+      return false;
+    }
+
+    isRestoringSession = true;
+    chatSessions.splice(0, chatSessions.length);
+
+    parsedState.sessions.forEach((session) => {
+      chatSessions.push({
+        id: session.id,
+        title: session.title,
+        lastUserPrompt: session.lastUserPrompt || "",
+        messages: Array.isArray(session.messages) ? session.messages : [],
+        nodes: [],
+        quizState: {
+          active: Boolean(session.quizState?.active),
+          currentIndex: Number.isInteger(session.quizState?.currentIndex) ? session.quizState.currentIndex : 0,
+          answers: Array.isArray(session.quizState?.answers) ? [...session.quizState.answers] : []
+        }
+      });
+    });
+
+    nextSessionId = Number.isInteger(parsedState.nextSessionId) ? parsedState.nextSessionId : (chatSessions.length + 1);
+    activeSessionId = parsedState.activeSessionId;
+
+    const activeSession = getSessionById(activeSessionId);
+    if (!activeSession) {
+      resetToBlankComposer();
+      return chatSessions.length > 0;
+    }
+
+    currentChatTitle = activeSession.title;
+    lastUserPrompt = activeSession.lastUserPrompt;
+    quizState.active = activeSession.quizState.active;
+    quizState.currentIndex = activeSession.quizState.currentIndex;
+    quizState.answers = [...activeSession.quizState.answers];
+    setConversationMode(activeSession.messages.length > 0);
+    restoreSessionNodes(activeSession);
+    renderHistory();
+    return true;
+  } catch {
+    return false;
+  } finally {
+    isRestoringSession = false;
+  }
 }
 
 function handleUserMessage(rawInput) {
@@ -1190,7 +1429,14 @@ if (sidebarOverlay) {
 
 if (clearHistoryButton) {
   clearHistoryButton.addEventListener("click", () => {
-    clearAllSessions();
+    openConfirmModal({
+      title: "Delete all chats?",
+      message: "This will permanently remove every saved chat in this browser session. These chats cannot be recovered.",
+      confirmLabel: "Delete all",
+      onConfirm: () => {
+        clearAllSessions();
+      }
+    });
   });
 }
 
@@ -1201,14 +1447,43 @@ if (newChatButton) {
 }
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && confirmModal && !confirmModal.hidden) {
+    closeConfirmModal();
+    return;
+  }
+
   if (event.key === "Escape" && appShell.classList.contains("sidebar-open")) {
     appShell.classList.remove("sidebar-open");
     syncNavigationState();
   }
 });
 
+if (confirmModalBackdrop) {
+  confirmModalBackdrop.addEventListener("click", () => {
+    closeConfirmModal();
+  });
+}
+
+if (confirmModalCancel) {
+  confirmModalCancel.addEventListener("click", () => {
+    closeConfirmModal();
+  });
+}
+
+if (confirmModalConfirm) {
+  confirmModalConfirm.addEventListener("click", () => {
+    const action = pendingConfirmAction;
+    closeConfirmModal();
+    if (typeof action === "function") {
+      action();
+    }
+  });
+}
+
 syncNavigationState();
-renderHistory();
+if (!loadPersistedSessions()) {
+  renderHistory();
+}
 refreshIcons();
 
 if (appSkeleton) {

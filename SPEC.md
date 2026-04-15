@@ -22,6 +22,7 @@ The app supports:
 - quick reply suggestions
 - a built-in security checkup quiz
 - multiple in-browser chat sessions
+- local browser persistence for saved chats
 - chat history switching and deletion
 - typing feedback and loading skeleton states
 - automatic scroll to the latest message
@@ -45,7 +46,7 @@ The final layout is a full-screen two-panel interface:
   - compact footer metadata
 - **Main Workspace**:
   - top status bar
-  - privacy/information banner
+  - privacy/information banner on the landing view
   - landing hero area before chat starts
   - conversation thread after chat begins
   - fixed composer at the bottom during active chat
@@ -64,7 +65,7 @@ The app has two main interface states:
    - chat thread becomes visible
    - composer docks into the active conversation layout
    - user and bot messages appear in distinct message bubbles
-   - privacy banner remains visible above the thread
+   - conversation area is given more space by removing the landing-only privacy banner from the active thread view
 
 ### 3.3 Visual Direction
 
@@ -170,6 +171,7 @@ The app has two main interface states:
    - sessions can be reopened from the sidebar
    - sessions can be deleted individually
    - all sessions can be cleared
+   - sessions are restored from localStorage after page refresh
 
 8. **Responsive Sidebar Behavior**
    - retract/expand on larger screens
@@ -259,6 +261,7 @@ The quiz may begin from prompts such as:
 - pending delayed bot responses are cleared when switching sessions
 - startup skeleton has a non-blocking fallback so it does not trap clicks
 - mobile overlay respects hidden state and does not block taps when closed
+- stored chats remain available after reload in the same browser unless the user clears them
 
 ---
 
@@ -287,6 +290,7 @@ The quiz may begin from prompts such as:
 - [x] Security quiz can be started, completed, and restarted
 - [x] Quiz results display a score and recommendations
 - [x] Multiple chat sessions can be created and revisited
+- [x] Chat sessions persist after refresh in the same browser
 - [x] Individual chats can be deleted
 - [x] All chat history can be cleared
 - [x] Sidebar shortcuts can start a new topic-based session
@@ -301,8 +305,9 @@ The quiz may begin from prompts such as:
 
 ## 9. Known Limitations
 
-- chat sessions are stored only in memory during the current browser session
+- chat sessions are stored only in browser localStorage
 - there is no backend persistence or database storage
+- chats do not sync across different devices or browsers
 - the chatbot is rule-based and not powered by a live AI model
 - responses are limited to the predefined FAQ knowledge and interaction rules
 - some behaviors depend on front-end timing and browser rendering, so final validation should still be done in the live deployed page

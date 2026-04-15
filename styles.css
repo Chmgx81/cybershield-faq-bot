@@ -983,6 +983,92 @@ button {
   color: #99f08f;
 }
 
+.confirm-modal[hidden] {
+  display: none !important;
+}
+
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.confirm-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.56);
+  backdrop-filter: blur(3px);
+}
+
+.confirm-modal-dialog {
+  position: relative;
+  width: min(100%, 420px);
+  padding: 22px 22px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  background: #1c1e20;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+}
+
+.confirm-modal-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(121, 222, 99, 0.12);
+  color: var(--accent-green);
+}
+
+.confirm-modal-copy h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.confirm-modal-copy p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.confirm-modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.confirm-button-secondary {
+  background: #2a2d2f;
+  color: var(--text);
+}
+
+.confirm-button-danger {
+  background: rgba(255, 109, 109, 0.16);
+  color: #ffb6b6;
+}
+
+.confirm-button:hover,
+.confirm-button:focus-visible {
+  outline: none;
+  filter: brightness(1.06);
+}
+
 .score-list {
   margin: 14px 0 0;
   padding-left: 18px;
@@ -1003,10 +1089,6 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-.workspace.chat-started .privacy-banner {
-  display: flex;
 }
 
 .workspace.chat-started .hero {

@@ -16,6 +16,7 @@ The goal of this project is to turn static cybersecurity FAQ content into an int
 - premium dark UI with responsive sidebar layout
 - mobile-responsive layout with touch-friendly controls
 - multiple in-browser chat sessions
+- local browser storage for restoring chats after refresh
 - chat history switching and deletion
 - quick reply suggestions after bot responses
 - typing indicator for conversational feedback
@@ -53,6 +54,7 @@ The interface also keeps the interaction smooth by:
 - showing a typing indicator before replies
 - scrolling to the newest message automatically
 - preserving separate in-browser chat sessions
+- restoring chat sessions from browser storage after refresh
 - adapting the sidebar, skeleton state, and composer for smaller screens
 
 ## Security Checkup Quiz
@@ -95,7 +97,8 @@ This project is suitable for FAQ chatbot submission because it demonstrates:
 ## Limitations
 
 - no backend or database
-- no persistent storage across browser reloads
+- chats are only stored in the current browser through localStorage
+- chats do not sync across different devices or browsers
 - no real AI or NLP model
 - responses are limited to predefined FAQ content and interaction rules
 
