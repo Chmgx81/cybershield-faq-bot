@@ -2,60 +2,38 @@
 
 CyberShield FAQ Bot is a premium dark-mode cybersecurity FAQ chatbot built as a school project using HTML, CSS, and vanilla JavaScript. It provides short, practical answers to common cybersecurity questions through a conversational interface and includes a built-in security checkup quiz.
 
+## Assignment Context
+
+This project was developed for **Task 22: Chatbot for FAQs**. It was intentionally designed as a rule-based chatbot so the FAQ logic, user interaction flow, and front-end implementation remain clear, explainable, and manageable within the scope of a school assignment.
+
 ## Project Purpose
 
 The goal of this project is to turn static cybersecurity FAQ content into an interactive chat experience. Instead of reading a traditional FAQ page, users can ask questions naturally and receive guided responses inside a modern chatbot interface.
 
 ## Main Features
 
-- Rule-based cybersecurity FAQ chatbot with weighted keyword matching
-- Premium dark UI with responsive sidebar layout
-- Multiple in-browser chat sessions with history management
-- Chat history switching and deletion with confirmation dialogs
-- **Persistent storage**: Chat sessions saved to localStorage and restored on reload
-- Quick reply suggestions after bot responses
-- Typing indicator for conversational feedback
-- Startup skeleton loading screen
-- Interactive security checkup quiz with scoring and personalized recommendations
-- Text normalization for handling typos and variations
-- Edge case handling for common scenarios
-- Security tips feature ("Did you know?")
-- Response variations for greetings and thanks (adds variety)
-- Keyboard shortcuts:
-  - `Ctrl+N` - New chat
-  - `Ctrl+K` - Focus input
-  - `Escape` - Close sidebar
+- rule-based cybersecurity FAQ chatbot
+- premium dark UI with responsive sidebar layout
+- mobile-responsive layout with touch-friendly controls
+- multiple in-browser chat sessions
+- chat history switching and deletion
+- quick reply suggestions after bot responses
+- typing indicator for conversational feedback
+- startup skeleton loading screen
+- automatic scroll to the latest message after replies render
+- interactive security checkup quiz with score and recommendations
+- greeting, help, identity, and fallback handling
 
 ## FAQ Topics Covered
 
-### Core Topics
-- Password Security
-- Phishing Awareness
-- Safe Browsing
-- Data Protection
-- Social Engineering
-- Mobile Security
-- Incident Response
-- General Best Practices
-
-### Extended Topics
-- Malware Protection
-- WiFi Security
-- Social Media Security
-- Software Updates
-- Two-Factor Authentication
-- Remote Work Security
-- Cloud Storage Security
-- Browser Security
-- Smart Device Security
-
-## Edge Cases Handled
-
-- Forgotten password assistance
-- Hacked account response
-- Clicked bad link guidance
-- "Is this email safe?" verification
-- Security tips ("Give me a tip")
+- password security
+- phishing awareness
+- safe browsing
+- data protection
+- social engineering
+- mobile security
+- incident response
+- general best practices
 
 ## How It Works
 
@@ -63,57 +41,64 @@ The chatbot does not use a live AI model or backend service. It works entirely i
 
 When a user submits a message:
 
-1. The input is normalized (handles typos, variations, and common misspellings)
-2. Keywords and phrases are matched against FAQ categories with weighted scoring
-3. The most relevant topic is selected based on the highest score
-4. A prepared response and follow-up suggestions are returned
+1. the input is normalized
+2. keywords and phrases are matched against FAQ categories
+3. the most relevant topic is selected
+4. a prepared response and follow-up suggestions are returned
 
 If the input is unclear, the bot gives a guided fallback response instead of failing silently.
 
+The interface also keeps the interaction smooth by:
+
+- showing a typing indicator before replies
+- scrolling to the newest message automatically
+- preserving separate in-browser chat sessions
+- adapting the sidebar, skeleton state, and composer for smaller screens
+
 ## Security Checkup Quiz
 
-The app includes a categorized quiz system that adapts to the conversation:
-
-- **From Sidebar Menu**: User selects from 6 categories
-- **After Topic Question**: Quiz auto-selects the relevant category
-
-### Quiz Categories (5 questions each, 30 total)
-1. **General Security** - Overall cybersecurity habits
-2. **Phishing Awareness** - Spotting phishing attempts
-3. **Password Security** - Password management habits
-4. **Mobile Security** - Phone/device protection
-5. **Social Media Security** - Privacy on social platforms
-6. **WiFi & Network Security** - Wireless and network safety
-
-At the end, it calculates a score and shows a recommendation card based on the user's result with practical next steps.
-
-## Technical Implementation
-
-- **Keyword Matching**: Weighted scoring system that considers keyword frequency and importance
-- **Text Normalization**: Handles 20+ common typos and phrase variations
-- **Session Management**: Multiple chat sessions with localStorage persistence
-- **Quiz Scoring**: 0-2 scale per question, categorized into low/medium/high security posture
-- **Keyboard Shortcuts**: Ctrl+N for new chat, Ctrl+K to focus input
+The app includes a short rule-based quiz that asks multiple-choice cybersecurity habit questions. At the end, it calculates a score and shows a recommendation card based on the user’s result.
 
 ## Files
 
 - `index.html` - app structure
 - `styles.css` - visual design and layout
-- `script.js` - chatbot logic, quiz logic, FAQ topics, and session handling
+- `script.js` - chatbot logic, quiz logic, and session handling
 - `SPEC.md` - final project specification
-- `README.md` - project documentation
 
 ## GitHub Pages Deployment
 
-This project is deployed and accessible at: **https://chmgx81.github.io/cybershield-faq-bot/**
+This project is ready to be deployed as a static site with GitHub Pages.
+
+Basic steps:
+
+1. create a new GitHub repository
+2. upload `index.html`, `styles.css`, `script.js`, `README.md`, and `SPEC.md`
+3. go to the repository `Settings`
+4. open the `Pages` section
+5. set the source to the main branch root
+6. save and wait for GitHub to generate the live URL
+
+After deployment, the app can be opened directly from the generated GitHub Pages link and shared by email with the lecturer.
+
+## Why This Project Is Suitable
+
+This project is suitable for FAQ chatbot submission because it demonstrates:
+
+- structured input handling
+- categorized question matching
+- fallback response design
+- conversational UI/UX thinking
+- session-based interaction
+- one added feature to stand out: the security checkup quiz
 
 ## Limitations
 
-- No backend or database
-- Sessions stored in browser localStorage (cleared when browser data is cleared)
-- No real AI or NLP model
-- Responses are limited to predefined FAQ content and interaction rules
+- no backend or database
+- no persistent storage across browser reloads
+- no real AI or NLP model
+- responses are limited to predefined FAQ content and interaction rules
 
 ## Summary
 
-CyberShield FAQ Bot demonstrates how a simple rule-based system can be presented in a polished, modern interface to create a strong chatbot experience for a school project. It combines practical cybersecurity guidance with a premium UI, comprehensive topic coverage, and lightweight front-end implementation. The project showcases understanding of NLP concepts, pattern matching, and interactive UI design.
+CyberShield FAQ Bot demonstrates how a simple rule-based system can be presented in a polished, modern interface to create a strong chatbot experience for a school project. It combines practical cybersecurity guidance with a premium UI and lightweight front-end implementation.

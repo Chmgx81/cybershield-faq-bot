@@ -341,8 +341,21 @@ function truncateInput(text) {
 }
 
 function scrollChatToBottom() {
-  requestAnimationFrame(() => {
+  const scrollToLatestMessage = () => {
+    const latestMessage = chatMessages.lastElementChild;
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    if (latestMessage instanceof HTMLElement) {
+      latestMessage.scrollIntoView({
+        block: "end",
+        behavior: "smooth"
+      });
+    }
+  };
+
+  requestAnimationFrame(() => {
+    scrollToLatestMessage();
+    window.setTimeout(scrollToLatestMessage, 80);
   });
 }
 

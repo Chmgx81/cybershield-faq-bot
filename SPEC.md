@@ -3,6 +3,7 @@
 ## 1. Project Overview
 
 - **Project Name**: CyberShield FAQ Bot
+- **Assignment Category**: Task 22 - Chatbot for FAQs
 - **Project Type**: Single-page web application
 - **Implementation Stack**: HTML, CSS, and vanilla JavaScript
 - **Application Style**: Rule-based cybersecurity FAQ chatbot with premium dark UI
@@ -23,6 +24,8 @@ The app supports:
 - multiple in-browser chat sessions
 - chat history switching and deletion
 - typing feedback and loading skeleton states
+- automatic scroll to the latest message
+- responsive mobile interaction fixes for overlay, skeleton layout, and touch targets
 
 No backend or online AI model is used. All logic runs in the browser.
 
@@ -123,6 +126,7 @@ The app has two main interface states:
 - full-page loading skeleton on startup
 - matches sidebar and main workspace structure
 - fades out after initial load
+- has mobile-specific layout adjustments so placeholder widths do not overflow small screens
 
 ---
 
@@ -150,29 +154,34 @@ The app has two main interface states:
    - shows animated typing dots before bot responses
    - delay is simulated for better conversational feel
 
-5. **Security Checkup Quiz**
+5. **Automatic Message Scrolling**
+   - conversation view scrolls to the newest message automatically
+   - helps keep bot replies and quiz cards visible without manual scrolling
+
+6. **Security Checkup Quiz**
    - started from keywords or the quiz UI trigger
    - presents multiple-choice questions
    - tracks quiz progress
    - calculates a score at the end
    - displays a recommendation card based on the result
 
-6. **Multi-Session Chat History**
+7. **Multi-Session Chat History**
    - each new conversation becomes its own in-memory chat session
    - sessions can be reopened from the sidebar
    - sessions can be deleted individually
    - all sessions can be cleared
 
-7. **Responsive Sidebar Behavior**
+8. **Responsive Sidebar Behavior**
    - retract/expand on larger screens
    - open/close drawer behavior on smaller screens
    - close on overlay click or `Escape`
+   - hidden mobile overlay does not block the interface
+   - touch targets are enlarged for easier mobile interaction
 
 ### 4.2 FAQ Categories
 
 The bot currently covers these FAQ topic groups:
 
-#### Core Topics
 1. Password Security
 2. Phishing Awareness
 3. Safe Browsing
@@ -181,28 +190,9 @@ The bot currently covers these FAQ topic groups:
 6. Mobile Security
 7. Incident Response
 8. General Best Practices
+9. Security Checkup Quiz
 
-#### Extended Topics
-9. Malware Protection
-10. WiFi Security
-11. Social Media Security
-12. Software Updates
-13. Two-Factor Authentication
-14. Remote Work Security
-15. Cloud Storage Security
-16. Browser Security
-17. Smart Device Security
-
-### 4.3 Edge Case Handlers
-
-The bot handles these special scenarios:
-- Forgotten password assistance
-- Hacked account response
-- Clicked bad link guidance
-- "Is this email safe?" verification
-- Security tips feature ("Give me a tip")
-
-### 4.4 Matching Logic
+### 4.3 Matching Logic
 
 The response engine uses lightweight browser-side logic:
 
@@ -219,6 +209,7 @@ Additional handling includes:
 - greeting/help/identity prompts
 - quiz restart phrases
 - guidance when the user types free text during an active quiz
+- stronger auto-scroll after delayed bot responses render
 
 ### 4.4 Session Behavior
 
@@ -242,22 +233,7 @@ The quiz may begin from prompts such as:
 - `rate my security`
 - `security checkup`
 
-### 5.2 Quiz Questions
-
-The security checkup quiz contains 10 questions covering:
-
-1. Unique password usage
-2. Multi-factor authentication adoption
-3. Link and attachment handling
-4. Software update frequency
-5. Data backup practices
-6. Incident response actions
-7. Public WiFi usage habits
-8. Social media privacy management
-9. File downloading safety
-10. Browser extension management
-
-### 5.3 Quiz Flow
+### 5.2 Quiz Flow
 
 - user starts the quiz
 - bot introduces the checkup
@@ -281,6 +257,8 @@ The security checkup quiz contains 10 questions covering:
 - unknown or vague input produces a guided fallback instead of a broken reply
 - active quiz state is protected from unrelated free-text interruptions
 - pending delayed bot responses are cleared when switching sessions
+- startup skeleton has a non-blocking fallback so it does not trap clicks
+- mobile overlay respects hidden state and does not block taps when closed
 
 ---
 
@@ -302,14 +280,11 @@ The security checkup quiz contains 10 questions covering:
 - [x] Sidebar contains new-chat, shortcut, and chat-history controls
 - [x] Landing screen shows hero content and suggested FAQ prompts
 - [x] User can send messages with the button or Enter key
-- [x] Bot returns relevant responses for all supported FAQ topics (18 topics)
-- [x] Extended topics (malware, WiFi, social media, updates, 2FA, remote work, cloud, browser, IoT) are covered
-- [x] Edge cases (forgot password, hacked account, clicked bad link, email safety check) are handled
-- [x] Security tips feature responds to "tip" and "did you know" prompts
+- [x] Bot returns relevant responses for supported FAQ topics
 - [x] Greeting, help, identity, and fallback prompts are handled cleanly
 - [x] Bot replies show typing feedback before appearing
 - [x] Quick reply suggestions are clickable
-- [x] Security quiz can be started, completed, and restarted (10 questions)
+- [x] Security quiz can be started, completed, and restarted
 - [x] Quiz results display a score and recommendations
 - [x] Multiple chat sessions can be created and revisited
 - [x] Individual chats can be deleted
@@ -317,7 +292,9 @@ The security checkup quiz contains 10 questions covering:
 - [x] Sidebar shortcuts can start a new topic-based session
 - [x] Mobile sidebar overlay and close behavior work
 - [x] Startup skeleton screen appears and fades out
+- [x] Mobile skeleton layout remains readable on small screens
 - [x] User and bot messages are visually distinct
+- [x] Conversation auto-scrolls to the latest response
 - [x] UI remains functional without a backend
 
 ---
@@ -328,3 +305,4 @@ The security checkup quiz contains 10 questions covering:
 - there is no backend persistence or database storage
 - the chatbot is rule-based and not powered by a live AI model
 - responses are limited to the predefined FAQ knowledge and interaction rules
+- some behaviors depend on front-end timing and browser rendering, so final validation should still be done in the live deployed page
