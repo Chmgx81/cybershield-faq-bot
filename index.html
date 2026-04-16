@@ -192,6 +192,23 @@
     </article>
   </template>
 
+  <div class="confirm-modal" id="confirmModal" hidden>
+    <div class="confirm-modal-backdrop" id="confirmModalBackdrop"></div>
+    <div class="confirm-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" aria-describedby="confirmModalMessage">
+      <div class="confirm-modal-icon" aria-hidden="true">
+        <i data-feather="alert-triangle"></i>
+      </div>
+      <div class="confirm-modal-copy">
+        <h3 id="confirmModalTitle">Delete chat?</h3>
+        <p id="confirmModalMessage">This action cannot be undone.</p>
+      </div>
+      <div class="confirm-modal-actions">
+        <button type="button" class="confirm-button confirm-button-secondary" id="confirmModalCancel">Cancel</button>
+        <button type="button" class="confirm-button confirm-button-danger" id="confirmModalConfirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/feather-icons"></script>
   <script src="script.js"></script>
 </body>
