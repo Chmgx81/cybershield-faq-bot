@@ -1272,6 +1272,29 @@ button {
 }
 
 @media (max-width: 640px) {
+  .confirm-modal {
+    padding: 14px;
+    align-items: end;
+  }
+
+  .confirm-modal-dialog {
+    width: 100%;
+    max-width: none;
+    padding: 18px 18px 16px;
+    border-radius: 18px;
+    margin-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .confirm-modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .confirm-button {
+    width: 100%;
+    min-height: 42px;
+  }
+
   .skeleton-main {
     padding: 14px 0 22px;
     gap: 20px;

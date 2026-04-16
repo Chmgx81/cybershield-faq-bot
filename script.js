@@ -400,7 +400,8 @@ function closeConfirmModal() {
   pendingConfirmAction = null;
 
   if (confirmModal) {
-    confirmModal.hidden = true;
+    confirmModal.setAttribute("hidden", "");
+    confirmModal.setAttribute("aria-hidden", "true");
   }
 }
 
@@ -414,7 +415,8 @@ function openConfirmModal({ title, message, confirmLabel, onConfirm }) {
   confirmModalMessage.textContent = message;
   confirmModalConfirm.textContent = confirmLabel;
   pendingConfirmAction = onConfirm;
-  confirmModal.hidden = false;
+  confirmModal.removeAttribute("hidden");
+  confirmModal.setAttribute("aria-hidden", "false");
   refreshIcons();
   confirmModalConfirm.focus();
 }
@@ -639,7 +641,7 @@ function openSession(sessionId) {
   quizState.active = session.quizState.active;
   quizState.currentIndex = session.quizState.currentIndex;
   quizState.answers = [...session.quizState.answers];
-  setConversationMode(session.nodes.length > 0);
+  setConversationMode((session.nodes?.length || 0) > 0 || (session.messages?.length || 0) > 0);
   restoreSessionNodes(session);
   renderHistory();
   persistSessions();
