@@ -15,11 +15,14 @@ from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
+# Get the directory where this script is located
+BASE_DIR = Path(__file__).parent.absolute()
+
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
 
-DATA_DIR = Path("data")
+DATA_DIR = BASE_DIR / "data"
 CHATS_FILE = DATA_DIR / "chats.json"
 os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -706,11 +709,16 @@ def clear_history():
 
 @app.route('/')
 def serve_index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('.', filename)
+    # Security: only allow static file types
+    allowed_extensions = {'', 'html', 'css', 'js', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'ico', 'txt', 'md'}
+    ext = filename.split('.')[-1] if '.' in filename else ''
+    if ext in allowed_extensions or not '.' in filename:
+        return send_from_directory(BASE_DIR, filename)
+    return jsonify({"error": "File not allowed"}), 403
 
 # ============================================================================
 # MAIN
