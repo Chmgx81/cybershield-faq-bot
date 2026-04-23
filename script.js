@@ -3,7 +3,8 @@
  * Communicates with Flask backend for FAQ logic
  */
 
-const API_BASE = 'http://127.0.0.1:5000/api';
+// const API_BASE = 'http://127.0.0.1:5000/api';  // Local development
+const API_BASE = 'https://cybershield-faq-bot.onrender.com/api';  // Production (Render)
 
 // ============================================================================
 // DOM ELEMENTS
