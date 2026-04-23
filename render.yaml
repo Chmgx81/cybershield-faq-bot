@@ -1,0 +1,14 @@
+# Render.com Blueprint
+# Deploy CyberShield FAQ Bot as a Web Service
+
+services:
+  - type: web
+    name: cybershield-faq-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
