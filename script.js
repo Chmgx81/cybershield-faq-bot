@@ -7,6 +7,54 @@
 const API_BASE = 'https://cybershield-faq-bot.onrender.com/api';  // Production (Render)
 
 // ============================================================================
+// API FUNCTIONS (connects to Flask backend)
+// ============================================================================
+
+async function fetchHistory() {
+  try {
+    const response = await fetch(`${API_BASE}/history`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    return data.sessions || [];
+  } catch (error) {
+    console.warn('Could not fetch history from API:', error);
+    return [];
+  }
+}
+
+async function fetchSession(sessionId) {
+  try {
+    const response = await fetch(`${API_BASE}/history/${sessionId}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    return data.session || null;
+  } catch (error) {
+    console.warn('Could not fetch session:', error);
+    return null;
+  }
+}
+
+async function deleteSessionAPI(sessionId) {
+  try {
+    const response = await fetch(`${API_BASE}/history/${sessionId}`, { method: 'DELETE' });
+    return response.ok;
+  } catch (error) {
+    console.warn('Could not delete session:', error);
+    return false;
+  }
+}
+
+async function clearHistoryAPI() {
+  try {
+    const response = await fetch(`${API_BASE}/history`, { method: 'DELETE' });
+    return response.ok;
+  } catch (error) {
+    console.warn('Could not clear history:', error);
+    return false;
+  }
+}
+
+// ============================================================================
 // DOM ELEMENTS
 // ============================================================================
 
