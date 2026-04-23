@@ -643,14 +643,29 @@ def quiz_answer():
     data = request.get_json() or {}
     session_id = data.get('session_id')
     score = data.get('score', 0)
+    current_index = data.get('current_index', 0)  # Get current question index from frontend
     
-    # For now, we handle quiz state client-side
-    # This endpoint could be expanded to track quiz state server-side
+    # Calculate next question index
+    next_index = current_index + 1
     
+    # Check if quiz is complete (6 questions total)
+    if next_index >= len(QUIZ_QUESTIONS):
+        return jsonify({
+            "session_id": session_id,
+            "quiz_complete": True,
+            "results": build_quiz_results([score])  # Placeholder - frontend handles accumulation
+        })
+    
+    # Return next question
     return jsonify({
         "session_id": session_id,
         "quiz_complete": False,
-        "next_question": build_quiz_question(1)  # Placeholder - real logic in frontend
+        "next_question": build_quiz_question(next_index),
+        "current_index": next_index,
+        "progress": {
+            "current": next_index + 1,
+            "total": len(QUIZ_QUESTIONS)
+        }
     })
 
 @app.route('/api/quiz/restart', methods=['POST'])

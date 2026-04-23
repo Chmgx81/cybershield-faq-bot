@@ -106,7 +106,11 @@ async function submitQuizAnswer(score, sessionId = null) {
     const response = await fetch(`${API_BASE}/quiz/answer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ score: score, session_id: sessionId })
+      body: JSON.stringify({ 
+        score: score, 
+        session_id: sessionId,
+        current_index: quizState.currentIndex
+      })
     });
 
     if (!response.ok) {
