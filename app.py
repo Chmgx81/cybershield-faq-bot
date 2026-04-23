@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 # ============================================================================
@@ -699,6 +699,18 @@ def clear_history():
     if clear_all_chats():
         return jsonify({"success": True, "message": "All chats cleared"})
     return jsonify({"error": "Failed to clear history"}), 500
+
+# ============================================================================
+# STATIC FILES (Frontend)
+# ============================================================================
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    return send_from_directory('.', filename)
 
 # ============================================================================
 # MAIN
